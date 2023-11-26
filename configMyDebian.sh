@@ -17,6 +17,9 @@ atualizacoes() {
 }
 
 addSudoUser() {
+    
+    # mudar para o metodo de acesso ao arquivo
+
     echo "Adicionando usuário sudo..."
     echo -e "Qual usuário deve ser adicionado? : "
     read inputName
@@ -30,8 +33,11 @@ addSudoUser() {
 installDevThings() {
     echo "Instalando pacotes para desenvolvimento"
 
-    sudo apt -y install git
-    sudo apt -y install nodejs npm
+    devThings=()
+    
+    sudo apt-get install -y curl #para add repositorios mais facilmente
+    sudo apt-get install -y git
+    sudo apt-get install -y nodejs npm
     sudo apt-get install -y default-jdk
     sudo apt-get install -y default-jre
     
@@ -41,8 +47,7 @@ installDevThings() {
 installApps() {    
     echo "Instalando pacotes em .deb..."
     
-
-    #TODO vs code google chrome estão em falta ainda...
+    #TODO google chrome estão em falta ainda...
     appsFromRepository=("gnome-console" "gnome-shell-pomodoro" "obs-studio" "pinhole")
     
     # -y autoriza sozinho
@@ -52,6 +57,7 @@ installApps() {
     done
     
     installSpotify
+    installVsCode
     installInstellijIdeaCommunity
 
     clear
@@ -62,7 +68,7 @@ removenApps() {
     
     echo "Removendo alguns apps que eu nao uso..."
 
-    appsUnsed=("cheese" "evolution" "zutty" "shotwell" "rhythmbox" "gnome-contacts" "gnome-maps")
+    appsUnsed=("cheese" "evolution" "zutty" "shotwell" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "gnome-terminal")
 
     for appsUnsed in "${appsUnsed[@]}"
     do
@@ -73,7 +79,8 @@ removenApps() {
 
     echo "Removendo jogos..."
 
-    jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "fire-in-a-row" "iagno" "vlc" "gnome-terminal")
+    # completar a lista de pacotes
+    jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "fire-in-a-row" "iagno" " ")
  
     for jogos in "${jogos[@]}"
     do
@@ -91,6 +98,14 @@ installSpotify() {
     sudo apt-get install  -y spotify-client
 }
 
+installVsCode() {
+    curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+    sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft-archive-keyring.gpg
+    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+    sudo apt-get update
+    sudo apt-get install code
+}
+
 installInstellijIdeaCommunity() {
     # Instala o IntelliJ community
     curl -s https://s3.eu-central-1.amazonaws.com/jetbrains-ppa/0xA6E8698A.pub.asc | gpg --dearmor | sudo tee /usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg > /dev/null
@@ -100,6 +115,7 @@ installInstellijIdeaCommunity() {
 
     clear
 }
+
 
 installFlatpak() {
     echo "Instalando o suporte a flatpak..."
