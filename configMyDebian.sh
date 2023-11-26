@@ -4,6 +4,8 @@ startMain() {
     atualizacoes
     addSudoUser
 
+    #chamar as outras funções aqui...
+
 }
 
 atualizacoes() {
@@ -110,11 +112,17 @@ installFlatpak() {
 }
 
 installFlatpakPrograms() {
-    
-    flatpak install -y flathub io.github.flattool.Warehouse
-    flatpak install -y flathub io.github.shiftey.Desktop
-    flatpak install -y flathub com.getpostman.Postman
-    flatpak install -y
+    echo "Instalando flatpaks..."
+
+    #Inserir mais apps:
+    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" )
+
+    for appsFlatpak in "${appsFlatpak[@]}"
+    do
+        flatpak install -y $appsFlatpak
+    done
+
+    clear
 }
 
 
