@@ -3,9 +3,15 @@
 startMain() {
     atualizacoes
     addSudoUser
-
-    #chamar as outras funções aqui...
-
+    installDevThings
+    installApps
+    removenApps
+    installSpotify
+    installVsCode
+    installInstellijIdeaCommunity
+    installDriversNvidia
+    installFlatpak
+    installFlatpakPrograms
 }
 
 atualizacoes() {
@@ -17,15 +23,19 @@ atualizacoes() {
 }
 
 addSudoUser() {
-    
-    # mudar para o metodo de acesso ao arquivo
 
+    echo "Instalando o sudo..."
+    su --login
+    sudo apt install sudo
+    
+    clear
+        
     echo "Adicionando usuário sudo..."
     echo -e "Qual usuário deve ser adicionado? : "
     read inputName
 
     userNameDebian = $inputName
-    sudo usermod -a -G sudo $userNameDebian
+    adduser $userNameDebian sudo
 
     clear
 }
@@ -33,13 +43,12 @@ addSudoUser() {
 installDevThings() {
     echo "Instalando pacotes para desenvolvimento"
 
-    devThings=()
+    devThings=( "curl" "git" "nodejs npm" "default-jdk" "default-jre")
     
-    sudo apt-get install -y curl #para add repositorios mais facilmente
-    sudo apt-get install -y git
-    sudo apt-get install -y nodejs npm
-    sudo apt-get install -y default-jdk
-    sudo apt-get install -y default-jre
+    for devThings in "${devThings[@]}"
+    do
+        sudo apt-get install -y devThings
+    done
     
     clear
 }
@@ -47,13 +56,11 @@ installDevThings() {
 installApps() {    
     echo "Instalando pacotes em .deb..."
     
-    #TODO google chrome estão em falta ainda...
-    appsFromRepository=("gnome-console" "gnome-shell-pomodoro" "obs-studio" "pinhole")
-    
-    # -y autoriza sozinho
+    appsFromRepository=("gnome-console" "gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape");
+        
     for appsFromRepository in "${appsFromRepository[@]}"
     do
-      sudo apt-get install -y appsFromRepository  
+      sudo apt-get install -y appsFromRepository;
     done
     
     installSpotify
@@ -80,7 +87,7 @@ removenApps() {
     echo "Removendo jogos..."
 
     # completar a lista de pacotes
-    jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "fire-in-a-row" "iagno" " ")
+    jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "fire-in-a-row" "iagno" "swell-foop" "gnome-klotski" "five-or-more" "gnome-robots" "gnome-tetravex" "gnome-taquin" "lightsoff" "gnome-mahjongg" "aisleriot" "gnome-nibbles" "gnome-chess" "tali")
  
     for jogos in "${jogos[@]}"
     do
@@ -95,7 +102,7 @@ installSpotify() {
     sudo curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
     echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
     sudo apt-get update
-    sudo apt-get install  -y spotify-client
+    sudo apt-get install -y spotify-client
 }
 
 installVsCode() {
@@ -103,7 +110,7 @@ installVsCode() {
     sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft-archive-keyring.gpg
     sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
     sudo apt-get update
-    sudo apt-get install code
+    sudo apt-get install -y code
 }
 
 installInstellijIdeaCommunity() {
@@ -116,6 +123,24 @@ installInstellijIdeaCommunity() {
     clear
 }
 
+installDriversNvidia() {
+    
+    echo "Instalando drivers da NVIDIA..."
+
+    sudo nano /etc/apt/sources.list
+
+    # Adicionando as linhas no final do arquivo
+    echo "# Debian Sid" | sudo tee -a /etc/apt/sources.list
+    echo "deb http://deb.debian.org/debian/ sid main contrib non-free non-free-firmware" | sudo tee -a /etc/apt/sources.list
+        
+    # Use 'Ctrl + O' para salvar e 'Ctrl + X' para sair do nano
+    echo -e "\x1B\x5B\x31\x3B\x35\x48\x0D\x0A\x1B\x5B\x31\x3B\x35\x41\x1B\x5B\x31\x3B\x35\x43" | sudo nano /etc/apt/sources.list
+
+    apt update
+    apt install nvidia-driver firmware-misc-nonfree
+
+    clear
+}
 
 installFlatpak() {
     echo "Instalando o suporte a flatpak..."
@@ -131,7 +156,7 @@ installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
     #Inserir mais apps:
-    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" )
+    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "md.obsidian.Obsidian" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
