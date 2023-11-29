@@ -25,7 +25,6 @@ atualizacoes() {
 addSudoUser() {
 
     echo "Instalando o sudo..."
-    su --login
     sudo apt install sudo
     
     clear
@@ -145,8 +144,8 @@ installDriversNvidia() {
 installFlatpak() {
     echo "Instalando o suporte a flatpak..."
 
-    sudo apt install flatpak
-    apt install gnome-software-plugin-flatpak
+    sudo apt install -y flatpak
+    apt install -y gnome-software-plugin-flatpak
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
     clear
