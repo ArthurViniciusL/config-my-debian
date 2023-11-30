@@ -45,7 +45,7 @@ installDevThings() {
     
     for devThings in "${devThings[@]}"
     do
-        sudo apt-get install -y devThings
+        sudo apt-get install -y $devThings
     done
     
     clear
@@ -58,7 +58,7 @@ installApps() {
         
     for appsFromRepository in "${appsFromRepository[@]}"
     do
-      sudo apt-get install -y appsFromRepository;
+      sudo apt-get install -y $appsFromRepository
     done
     
     installSpotify
@@ -67,7 +67,6 @@ installApps() {
 
     clear
 }
-
 
 removenApps() {
     
