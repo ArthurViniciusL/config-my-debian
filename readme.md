@@ -5,7 +5,7 @@
 
 <h1>Configurações</h1>
 
-<h3>Rodando o script (dentro da VM):</h3>
+<h3>Rodando o script:</h3>
     - Abra o terminal.
     - Digite:
         su
