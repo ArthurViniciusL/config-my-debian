@@ -6,7 +6,8 @@
 <h1>Configurações</h1>
 
 <h3>Rodando o script:</h3>
-    - Abra o terminal.
+    <p>Abra o terminal.</p>
+    <p1>calma que eu tô escrevendo o resto...</p1>
     - Digite:
         su
     - Informe a senha root (1234).
