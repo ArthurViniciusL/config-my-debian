@@ -1,5 +1,5 @@
 #!/bin/bash
-#v 1.0.6
+#v 2.0
 
 startMain() {
     atualizacoes
