@@ -1,4 +1,5 @@
 #!/bin/bash
+#v 1.0.2
 
 startMain() {
     atualizacoes
@@ -33,8 +34,7 @@ addSudoUser() {
     echo -e "Qual usuário deve ser adicionado? : "
     read inputName
 
-    userNameDebian = $inputName
-    adduser $userNameDebian sudo
+    adduser $inputName sudo
 
     clear
 }
@@ -46,7 +46,7 @@ installDevThings() {
     
     for devThings in "${devThings[@]}"
     do
-        sudo apt-get install -y devThings
+        sudo apt-get install -y $devThings
     done
     
     clear
@@ -59,7 +59,7 @@ installApps() {
         
     for appsFromRepository in "${appsFromRepository[@]}"
     do
-      sudo apt-get install -y appsFromRepository;
+      sudo apt-get install -y $appsFromRepository
     done
     
     installSpotify
@@ -68,7 +68,6 @@ installApps() {
 
     clear
 }
-
 
 removenApps() {
     
@@ -135,8 +134,8 @@ installDriversNvidia() {
     # Use 'Ctrl + O' para salvar e 'Ctrl + X' para sair do nano
     echo -e "\x1B\x5B\x31\x3B\x35\x48\x0D\x0A\x1B\x5B\x31\x3B\x35\x41\x1B\x5B\x31\x3B\x35\x43" | sudo nano /etc/apt/sources.list
 
-    apt update
-    apt install nvidia-driver firmware-misc-nonfree
+    sudo apt update
+    sudo apt install -y nvidia-driver firmware-misc-nonfree
 
     clear
 }
@@ -154,7 +153,6 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    #Inserir mais apps:
     appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "md.obsidian.Obsidian" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments")
 
     for appsFlatpak in "${appsFlatpak[@]}"

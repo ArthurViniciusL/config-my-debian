@@ -1,19 +1,7 @@
 #!/bin/bash
 
-main() {
-    func
-    
-}
+echo "Adicionando usuário sudo..."
+echo -e "Qual usuário deve ser adicionado? : "
+read inputName
 
-func() {
-    echo "Removendo jogos..."
-
-    jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "fire-in-a-row" "iagno")
- 
-    for jogos in "${jogos[@]}"
-    do
-        echo "jogo: $jogos"
-    done
-}
-
-main
+echo "Aqui:" $inputName
