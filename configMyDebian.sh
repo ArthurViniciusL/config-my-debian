@@ -1,5 +1,5 @@
 #!/bin/bash
-#v 2.0
+#v 2.0.1
 
 startMain() {
     atualizacoes
@@ -205,6 +205,6 @@ showDebianLogo() {
     echo"                                                   "
 }
 
-showDebianLogo
+#showDebianLogo
 startMain
 sudo reboot
