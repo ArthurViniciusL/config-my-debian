@@ -1,5 +1,5 @@
 #!/bin/bash
-#v 1.0.5
+#v 1.0.6
 
 startMain() {
     atualizacoes
@@ -27,7 +27,7 @@ addSudoUser() {
 
     echo "Instalando o sudo..."
 
-    su --login
+    #su --login
 
     sudo apt install -y sudo
     
@@ -36,8 +36,11 @@ addSudoUser() {
     echo "Adicionando usuário sudo..."
 
     userName=$USER
-    adduser $userName sudo
+    
+    sudo nano /etc/sudoers
+    echo "$userName ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
 
+ 
     apt update
     apt upgrade
 
@@ -90,7 +93,7 @@ removenApps() {
     echo "Removendo jogos..."
 
     # completar a lista de pacotes
-    jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "four-in-a-row" "iagno" "swell-foop" "gnome-klotski" "five-or-more" "gnome-robots" "gnome-tetravex" "gnome-taquin" "lightsoff" "gnome-mahjongg" "aisleriot" "gnome-nibbles" "gnome-chess" "tali")
+    jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "four-in-a-row" "iagno" "swell-foop" "gnome-klotski" "five-or-more" "gnome-robots" "gnome-tetravex" "gnome-taquin" "lightsoff" "gnome-mahjongg" "aisleriot" "gnome-nibbles" "gnome-chess" "tali" "hitori")
  
     for jogos in "${jogos[@]}"
     do
