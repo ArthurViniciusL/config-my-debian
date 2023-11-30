@@ -33,8 +33,7 @@ addSudoUser() {
     echo -e "Qual usuário deve ser adicionado? : "
     read inputName
 
-    userNameDebian = $inputName
-    adduser $userNameDebian sudo
+    adduser $inputName sudo
 
     clear
 }
