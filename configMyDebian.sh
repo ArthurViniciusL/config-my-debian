@@ -133,8 +133,8 @@ installDriversNvidia() {
     # Use 'Ctrl + O' para salvar e 'Ctrl + X' para sair do nano
     echo -e "\x1B\x5B\x31\x3B\x35\x48\x0D\x0A\x1B\x5B\x31\x3B\x35\x41\x1B\x5B\x31\x3B\x35\x43" | sudo nano /etc/apt/sources.list
 
-    apt update
-    apt install nvidia-driver firmware-misc-nonfree
+    sudo apt update
+    sudo apt install -y nvidia-driver firmware-misc-nonfree
 
     clear
 }
