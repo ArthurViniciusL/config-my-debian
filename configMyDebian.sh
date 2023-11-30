@@ -1,5 +1,5 @@
 #!/bin/bash
-#v 1.0.2
+#v 1.0.5
 
 startMain() {
     atualizacoes
@@ -26,7 +26,10 @@ atualizacoes() {
 addSudoUser() {
 
     echo "Instalando o sudo..."
-    sudo apt install sudo
+
+    su --login
+
+    sudo apt install -y sudo
     
     clear
         
@@ -34,6 +37,9 @@ addSudoUser() {
 
     userName=$USER
     adduser $userName sudo
+
+    apt update
+    apt upgrade
 
     clear
 }
@@ -54,7 +60,7 @@ installDevThings() {
 installApps() {    
     echo "Instalando pacotes em .deb..."
     
-    appsFromRepository=("gnome-console" "gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape");
+    appsFromRepository=("gnome-console" "gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape" "pitivi");
         
     for appsFromRepository in "${appsFromRepository[@]}"
     do
