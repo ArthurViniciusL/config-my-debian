@@ -1,5 +1,5 @@
 #!/bin/bash
-#v 1.0.6
+#v 2.0
 
 startMain() {
     atualizacoes
@@ -171,6 +171,40 @@ installFlatpakPrograms() {
     clear
 }
 
+showDebianLogo() {
+    echo"                    xWW'   .                       "
+    echo"               ,WNXK00000KXKKKKXXNW'               "
+    echo"            xNX00000000000000000000KK0KNX:         "
+    echo"         lNK00000000l             00000000XN       "
+    echo"       dX0000000                     c000000KK     "
+    echo"      N0000000'                        ;000000X,   "
+    echo"  '  X0000;                              x00000K:  "
+    echo"   kX000'                                 l000. o  "
+    echo"  o000c                  .WWWWWo           d00Xc.  "
+    echo".;K000                ;NK         ,        '000c   "
+    echo" K000                Wl                     000k   "
+    echo",000.               X,                      O00Kl  "
+    echo"'000               0d                ;      000x   "
+    echo",00k               0d                       O0k    "
+    echo",00o               x0.             ..      o00'    "
+    echo",00o               .0K                    NK0'     "
+    echo".000                ,0N.                'N0x       "
+    echo" 000,              ;; ,KW.           .ONKl         "
+    echo" l00d                 ,l 0XNWN  :WWNXKd            "
+    echo"  000o                    K.                       "
+    echo"  '000KN                                           "
+    echo"   ;000K.                                          "
+    echo"    ,000O                                          "
+    echo"     .000K                                         "
+    echo"       o00X,                                       "
+    echo"         00KK                                      "
+    echo"           00XW,                                   "
+    echo"             c0KX                                  "
+    echo"                ;KXWX                              "
+    echo"                     KNM                           "
+    echo"                                                   "
+}
 
+showDebianLogo
 startMain
 sudo reboot
