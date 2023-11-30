@@ -31,10 +31,9 @@ addSudoUser() {
     clear
         
     echo "Adicionando usuário sudo..."
-    echo -e "Qual usuário deve ser adicionado? : "
-    read inputName
 
-    adduser $inputName sudo
+    userName=$USER
+    adduser $userName sudo
 
     clear
 }
