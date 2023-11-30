@@ -1,4 +1,4 @@
-#Autor: Arthur Vinicius
+<h1/>Autor: Arthur Vinicius<h1/>
 #Sobre: https://arthurviniciusl.github.io/arthur-vs-lucena/
 
 Sintas a vontade para testar e até mesmo melhorar o script de pós-instalação. Mas lembre-se de manter os créditos do autor original.
