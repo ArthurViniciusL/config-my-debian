@@ -1,4 +1,5 @@
 #!/bin/bash
+#v 1.0.2
 
 startMain() {
     atualizacoes
@@ -152,7 +153,6 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    #Inserir mais apps:
     appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "md.obsidian.Obsidian" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments")
 
     for appsFlatpak in "${appsFlatpak[@]}"
