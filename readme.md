@@ -24,7 +24,7 @@
         <pre><code>chmod +x configMyDebian.sh</code></pre>
     </li>
     <li>Execute o script:
-        <pre><code>/configMyDebian.sh</code></pre>
+        <pre><code>./configMyDebian.sh</code></pre>
     </li>
     <li>Adicione o usuário ao sudo Abaixo da linha "root ALL=(ALL:ALL) ALL".
         <pre><code>seu_nome_de_usuario ALL=(ALL:ALL) ALL</code></pre>
