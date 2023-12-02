@@ -9,7 +9,9 @@
 <ol>
     <li>Abra o terminal.</li>
     <li>Digite:
-        <p>su</p>
+        <pre>
+            <code>su</code>
+        </pre>
     </li>
     <li></li>
     <li></li>
