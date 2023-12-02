@@ -17,6 +17,9 @@
         <code>su</code>
     </pre>
     <li></li>
+    ```
+    npx nodemon .\index.js
+    ```
     <li></li>
     <li></li>
     <li></li>
