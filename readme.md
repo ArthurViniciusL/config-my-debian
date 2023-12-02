@@ -6,10 +6,23 @@
 <h1>Configurações</h1>
 
 <h3>Rodando o script:</h3>
-    <p>Abra o terminal.</p>
+<ol>
+    <li>Abra o terminal.</li>
+    <li>Digite:
+        <p>su</p>
+    </li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ol>
+    <p></p>
     <p1>calma que eu tô escrevendo o resto...</p1>
-    - Digite:
-        su
+    - 
     - Informe a senha root (1234).
     - Clone o repositório com:
         git clone https://github.com/ArthurViniciusL/my-shells-scripts.git
