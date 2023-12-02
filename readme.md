@@ -13,9 +13,7 @@
         <code>su</code>
     </pre>
     <li></li>
-    <pre>
-        su
-    </pre>
+    <code>su</code>
     <li></li>
     <li></li>
     <li></li>
