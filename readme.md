@@ -8,11 +8,10 @@
 <h3>Rodando o script:</h3>
 <ol>
     <li>Abra o terminal.</li>
-    <li>Digite:
-        <pre>
-            <code>su</code>
-        </pre>
-    </li>
+    <li>Digite:</li>
+    <pre>
+        <code>su</code>
+    </pre>
     <li></li>
     <li></li>
     <li></li>
@@ -22,23 +21,7 @@
     <li></li>
     <li></li>
 </ol>
-    <p></p>
-    <p1>calma que eu tô escrevendo o resto...</p1>
-    - 
-    - Informe a senha root (1234).
-    - Clone o repositório com:
-        git clone https://github.com/ArthurViniciusL/my-shells-scripts.git
-    - Entre no diretório baixado:
-        cd my-shells-scripts
-    - Permita a execução do arquivo:
-        chmod +x configMyDebian.sh
-    - Execute o script:
-        ./configMyDebian.sh
-    - Adicione o usuário ao sudo Abaixo da linha "root ALL=(ALL:ALL) ALL" 
-        digite: arthur-deb ALL=(ALL:ALL) ALL
-    - Salve o arquivo apertando o atalho: ctrl+o
-    - Feche o arquivo apertando o atalho: ctrl+x
-    - Deixe o configMyDebian trabalhar.
+   
     
 <h3>Para apenas testar o script utilize o virtualbox</h3>
 <p>Instale o virtualbox na sua maquina.</p>
