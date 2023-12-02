@@ -11,7 +11,9 @@
     <li>Digite:
         <pre><code>su</code></pre>
     </li>
-    <li>Informe a senha root (1234).</li>
+    <li>Informe a senha root:
+        <pre><code>1234</code></pre>
+     </li>
     <li>Clone o repositório com:
         <pre><code>git clone https://github.com/ArthurViniciusL/my-shells-scripts.git</code></pre>
     </li>
