@@ -35,8 +35,8 @@ addSudoUser() {
     echo "$userName ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
 
     
-    apt update
-    apt upgrade
+    #apt update
+    #apt upgrade
     
     #exit
 
