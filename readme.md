@@ -1,7 +1,7 @@
 <h1>Autor: Arthur Vinicius</h1>
 <h2>Sobre: https://arthurviniciusl.github.io/arthur-vs-lucena/</h2>
 
-<p>Sinta-se a vontade para testar e até mesmo melhorar o script de pós-instalação. Mas lembre-se de manter os créditos do autor original.</p>
+<p>Sinta-se a vontade para testar, melhorar e até mesmo adaptar o script de pós-instalação. Mas lembre-se de manter os créditos do autor original.</p>
 
 <h1>Configurações</h1>
 
