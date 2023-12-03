@@ -59,7 +59,7 @@
 <hr>
 <h3>Para apenas testar o script utilize o virtualbox</h3>
 <ol>
-    <li>Faça download da maquina virtual: <a>https://drive.google.com/drive/folders/1Uu_7uJpK82PbeXWs8vP1wMiNl2KW0O6F?usp=sharing</a></li>
+    <li>Faça download da maquina virtual: https://drive.google.com/drive/folders/1Uu_7uJpK82PbeXWs8vP1wMiNl2KW0O6F?usp=sharing</li>
     <li>Instale o virtualbox na sua maquina.</li>
     <li>Importe o arquivo: debian-12-vm.ova</li>
     <li>Execute a maquina virtual.</li>
