@@ -38,11 +38,11 @@ addSudoUser() {
     apt update
     apt upgrade
     
-    exit
+    #exit
 
-    su --login
-    apt install -y sudo
-    adduser $userName sudo
+    #su --login
+    #apt install -y sudo
+    #adduser $userName sudo
     clear
 }
 
