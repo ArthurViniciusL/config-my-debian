@@ -5,9 +5,6 @@ startMain() {
     installDevThings
     installApps
     removenApps
-    installSpotify
-    installVsCode
-    installInstellijIdeaCommunity
     installDriversNvidia
     installFlatpak
     installFlatpakPrograms
@@ -44,7 +41,7 @@ addSudoUser() {
     exit
 
     su --login
-    apt install sudo
+    apt install -y sudo
     adduser $userName sudo
     clear
 }
@@ -163,7 +160,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "md.obsidian.Obsidian" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments")
+    appsFlatpak=("flathub io.github.flattool.Warehouse" "flatpak install flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "md.obsidian.Obsidian" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
