@@ -13,8 +13,8 @@ startMain() {
 
 atualizacoes() {
     echo "Fazendo atualizacoes..."
-    sudo apt-get -y update
-    sudo apt-get -y upgrade
+    sudo apt-get update
+    sudo apt-get upgrade
 
     clear
 }
@@ -22,8 +22,6 @@ atualizacoes() {
 addSudoUser() {
 
     echo "Adicionando usuário sudo..."
-
-    userName=$USER
     
     sudo nano /etc/sudoers
     echo "$userName ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
@@ -32,11 +30,12 @@ addSudoUser() {
     
     echo "Instalando o sudo..."
 
+    userName=$USER
     sudo apt install -y sudo
     adduser $userName sudo
         
-    apt-get -y update
-    apt-get -y upgrade
+    sudo apt update
+    sudo apt -y upgrade
 
     clear
 }
