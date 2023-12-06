@@ -20,7 +20,7 @@
     </li>
     <br>
     <li>Entre no diretório baixado:
-        <pre><code>cd my-shells-scripts</code></pre>
+        <pre><code>cd config-my-debian</code></pre>
     </li>
     <br>
     <li>Permita a execução do arquivo:
