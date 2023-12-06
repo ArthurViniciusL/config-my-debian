@@ -34,9 +34,7 @@ addSudoUser() {
 
     sudo apt install -y sudo
     adduser $userName sudo
-    
-    exit
-    
+        
     apt-get -y update
     apt-get -y upgrade
 
@@ -135,9 +133,6 @@ installDriversNvidia() {
     echo "# Debian Sid" | sudo tee -a /etc/apt/sources.list
     echo "deb http://deb.debian.org/debian/ sid main contrib non-free non-free-firmware" | sudo tee -a /etc/apt/sources.list
         
-    # Use 'Ctrl + O' para salvar e 'Ctrl + X' para sair do nano
-    sudo nano /etc/apt/sources.list
-
     sudo apt update
     sudo apt install -y nvidia-driver firmware-misc-nonfree
 
