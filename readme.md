@@ -16,7 +16,7 @@
     <li>Informe a sua senha root.</li>
     <br>
     <li>Clone o repositório com:
-        <pre><code>git clone https://github.com/ArthurViniciusL/my-shells-scripts.git</code></pre>
+        <pre><code>git clone https://github.com/ArthurViniciusL/config-my-debian.git</code></pre>
     </li>
     <br>
     <li>Entre no diretório baixado:
