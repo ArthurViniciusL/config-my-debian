@@ -13,8 +13,8 @@ startMain() {
 
 atualizacoes() {
     echo "Fazendo atualizacoes..."
-    sudo apt-get update
-    sudo apt-get upgrade
+    sudo apt-get -y update
+    sudo apt-get -y upgrade
 
     clear
 }
@@ -34,15 +34,15 @@ addSudoUser() {
     sudo nano /etc/sudoers
     echo "$userName ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
 
+    su --login
+    apt install -y sudo
+    adduser $userName sudo
     
-    #apt update
-    #apt upgrade
+    exit
     
-    #exit
+    apt-get -y update
+    apt-get -y upgrade
 
-    #su --login
-    #apt install -y sudo
-    #adduser $userName sudo
     clear
 }
 
@@ -103,7 +103,7 @@ removenApps() {
 }
 
 installSpotify() {
-    # Instala o spotify .deb
+    # Instala o spotify
     sudo curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
     echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
     sudo apt-get update
@@ -139,7 +139,7 @@ installDriversNvidia() {
     echo "deb http://deb.debian.org/debian/ sid main contrib non-free non-free-firmware" | sudo tee -a /etc/apt/sources.list
         
     # Use 'Ctrl + O' para salvar e 'Ctrl + X' para sair do nano
-    echo -e "\x1B\x5B\x31\x3B\x35\x48\x0D\x0A\x1B\x5B\x31\x3B\x35\x41\x1B\x5B\x31\x3B\x35\x43" | sudo nano /etc/apt/sources.list
+    sudo nano /etc/apt/sources.list
 
     sudo apt update
     sudo apt install -y nvidia-driver firmware-misc-nonfree
