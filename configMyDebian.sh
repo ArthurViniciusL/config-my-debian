@@ -21,12 +21,6 @@ atualizacoes() {
 
 addSudoUser() {
 
-    echo "Instalando o sudo..."
-
-    sudo apt install -y sudo
-    
-    clear
-        
     echo "Adicionando usuário sudo..."
 
     userName=$USER
@@ -34,8 +28,11 @@ addSudoUser() {
     sudo nano /etc/sudoers
     echo "$userName ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
 
-    su --login
-    apt install -y sudo
+    clear
+    
+    echo "Instalando o sudo..."
+
+    sudo apt install -y sudo
     adduser $userName sudo
     
     exit
