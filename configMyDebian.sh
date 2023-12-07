@@ -1,5 +1,5 @@
 #!/bin/bash
-#v 2.0.1
+#v 2.0.2
 startMain() {
     atualizacoes
     installDevThings
@@ -21,28 +21,22 @@ atualizacoes() {
 
 addSudoUser() {
 
-    echo "Instalando o sudo..."
-
-    sudo apt install -y sudo
-    
-    clear
-        
     echo "Adicionando usuário sudo..."
-
-    userName=$USER
     
     sudo nano /etc/sudoers
     echo "$userName ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
 
+    clear
     
-    #apt update
-    #apt upgrade
-    
-    #exit
+    echo "Instalando o sudo..."
 
-    #su --login
-    #apt install -y sudo
-    #adduser $userName sudo
+    userName=$USER
+    sudo apt install -y sudo
+    adduser $userName sudo
+        
+    sudo apt update
+    sudo apt -y upgrade
+
     clear
 }
 
@@ -103,7 +97,7 @@ removenApps() {
 }
 
 installSpotify() {
-    # Instala o spotify .deb
+    # Instala o spotify
     sudo curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
     echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
     sudo apt-get update
@@ -138,9 +132,6 @@ installDriversNvidia() {
     echo "# Debian Sid" | sudo tee -a /etc/apt/sources.list
     echo "deb http://deb.debian.org/debian/ sid main contrib non-free non-free-firmware" | sudo tee -a /etc/apt/sources.list
         
-    # Use 'Ctrl + O' para salvar e 'Ctrl + X' para sair do nano
-    echo -e "\x1B\x5B\x31\x3B\x35\x48\x0D\x0A\x1B\x5B\x31\x3B\x35\x41\x1B\x5B\x31\x3B\x35\x43" | sudo nano /etc/apt/sources.list
-
     sudo apt update
     sudo apt install -y nvidia-driver firmware-misc-nonfree
 
