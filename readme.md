@@ -10,7 +10,7 @@
     <li>Abra o terminal.</li>
     <br>
     <li>Digite:
-        <pre><code>su</code></pre>
+        <pre><code>su --login</code></pre>
     </li>
     <br>
     <li>Informe a sua senha root.</li>
