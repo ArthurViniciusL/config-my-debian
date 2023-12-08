@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#v 2.0.3
+#v 2.0.4
 
 startMain() {
     atualizacoes
@@ -108,6 +108,8 @@ installSpotify() {
     echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
     sudo apt-get update
     sudo apt-get install -y spotify-client
+
+    clear
 }
 
 installVsCode() {
@@ -116,6 +118,8 @@ installVsCode() {
     sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
     sudo apt-get update
     sudo apt-get install -y code
+
+    clear
 }
 
 installInstellijIdeaCommunity() {
@@ -138,7 +142,6 @@ installDriversNvidia() {
     echo "# Debian Sid" | sudo tee -a /etc/apt/sources.list
     echo "deb http://deb.debian.org/debian/ sid main contrib non-free non-free-firmware" | sudo tee -a /etc/apt/sources.list
         
-    
     sudo apt update
     sudo apt install -y nvidia-driver firmware-misc-nonfree
 
