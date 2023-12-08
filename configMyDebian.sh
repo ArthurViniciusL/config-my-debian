@@ -1,11 +1,14 @@
 #!/bin/bash
-#v 2.0.1
+
+#v 2.0.3
+
 startMain() {
     atualizacoes
     installDevThings
     removenApps
     installApps
     installDriversNvidia
+    installApps
     installFlatpak
     installFlatpakPrograms
     addSudoUser
