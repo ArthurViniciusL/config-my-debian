@@ -3,9 +3,9 @@
 startMain() {
     atualizacoes
     installDevThings
-    installApps
     removenApps
     installDriversNvidia
+    installApps
     installFlatpak
     installFlatpakPrograms
     addSudoUser
