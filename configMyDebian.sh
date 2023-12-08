@@ -138,9 +138,7 @@ installDriversNvidia() {
     echo "# Debian Sid" | sudo tee -a /etc/apt/sources.list
     echo "deb http://deb.debian.org/debian/ sid main contrib non-free non-free-firmware" | sudo tee -a /etc/apt/sources.list
         
-    # Use 'Ctrl + O' para salvar e 'Ctrl + X' para sair do nano
-    echo -e "\x1B\x5B\x31\x3B\x35\x48\x0D\x0A\x1B\x5B\x31\x3B\x35\x41\x1B\x5B\x31\x3B\x35\x43" | sudo nano /etc/apt/sources.list
-
+    
     sudo apt update
     sudo apt install -y nvidia-driver firmware-misc-nonfree
 
