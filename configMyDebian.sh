@@ -1,5 +1,6 @@
 #!/bin/bash
 #v 2.0.3
+
 startMain() {
     atualizacoes
     installDevThings
