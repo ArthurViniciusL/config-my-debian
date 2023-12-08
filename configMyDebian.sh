@@ -3,8 +3,8 @@
 startMain() {
     atualizacoes
     installDevThings
-    installApps
     removenApps
+    installApps
     installDriversNvidia
     installFlatpak
     installFlatpakPrograms
