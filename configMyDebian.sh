@@ -5,8 +5,8 @@
 startMain() {
     atualizacoes
     installDevThings
-    removenApps
     installApps
+    removenApps
     installDriversNvidia
     installApps
     installFlatpak
@@ -62,7 +62,7 @@ installDevThings() {
 installApps() {    
     echo "Instalando pacotes em .deb..."
     
-    appsFromRepository=("gnome-console" "gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape" "pitivi");
+    appsFromRepository=("gnome-console" "gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape" "kdenlive");
         
     for appsFromRepository in "${appsFromRepository[@]}"
     do
@@ -80,7 +80,7 @@ removenApps() {
     
     echo "Removendo alguns apps que eu nao uso..."
 
-    appsUnsed=("cheese" "evolution" "zutty" "shotwell" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "gnome-terminal")
+    appsUnsed=("cheese" "evolution" "zutty" "shotwell" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "gnome-terminal" "kdeconnect")
 
     for appsUnsed in "${appsUnsed[@]}"
     do
