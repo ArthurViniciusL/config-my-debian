@@ -91,7 +91,6 @@ removenApps() {
 
     echo "Removendo jogos..."
 
-    # completar a lista de pacotes
     jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "four-in-a-row" "iagno" "swell-foop" "gnome-klotski" "five-or-more" "gnome-robots" "gnome-tetravex" "gnome-taquin" "lightsoff" "gnome-mahjongg" "aisleriot" "gnome-nibbles" "gnome-chess" "tali" "hitori")
  
     for jogos in "${jogos[@]}"
@@ -161,7 +160,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "md.obsidian.Obsidian" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments")
+    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
