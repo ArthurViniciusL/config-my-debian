@@ -69,6 +69,11 @@ installApps() {
       sudo apt-get install -y $appsFromRepository
     done
     
+    clear
+
+    echo "Aplicando estilos no Firefox"
+    curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
+    
     installSpotify
     installVsCode
     installInstellijIdeaCommunity
@@ -160,7 +165,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments")
+    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments" "flathub md.obsidian.Obsidian")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
