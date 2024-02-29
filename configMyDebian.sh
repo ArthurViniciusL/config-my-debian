@@ -146,9 +146,9 @@ installDriversNvidia() {
     sudo apt-get update
     sudo apt-get upgrade
 
-    sudo apt-get install nvidia-detect linux-headers-amd64
-    sudo apt-get install nvidia-driver firmware-misc-nonfree
-    sudo apt-get install nvidia-cuda-dev nvidia-cuda-toolkit libnvidia-encode1
+    sudo apt-get install nvidia-detect linux-headers-amd64 -y
+    sudo apt-get install nvidia-driver firmware-misc-nonfree -y
+    sudo apt-get install nvidia-cuda-dev nvidia-cuda-toolkit libnvidia-encode1 -y
 
 
     clear
