@@ -28,12 +28,10 @@ addSudoUser() {
 
     
     sudo nano /etc/sudoers
-    echo "$userName ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
-
+    
     clear
 
-    echo "Instalando o sudo..."
-   
+    echo "Instalando o sudo..."   
     userName=$USER
     apt install -y sudo
     adduser $userName sudo
@@ -70,14 +68,16 @@ installApps() {
     done
     
     clear
-
-    echo "Aplicando estilos no Firefox"
-    curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
     
     installSpotify
     installVsCode
     installInstellijIdeaCommunity
 
+    clear
+    cd /home/arthur
+    echo "Aplicando estilos no Firefox"
+    curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
+    
     clear
 }
 
@@ -141,13 +141,15 @@ installDriversNvidia() {
     echo "Instalando drivers da NVIDIA..."
 
     sudo nano /etc/apt/sources.list
+    
+    echo "Atualizando pacotes"
+    sudo apt-get update
+    sudo apt-get upgrade
 
-    # Adicionando as linhas no final do arquivo
-    echo "# Debian Sid" | sudo tee -a /etc/apt/sources.list
-    echo "deb http://deb.debian.org/debian/ sid main contrib non-free non-free-firmware" | sudo tee -a /etc/apt/sources.list
-        
-    sudo apt update
-    sudo apt install -y nvidia-driver firmware-misc-nonfree
+    sudo apt-get install nvidia-detect linux-headers-amd64
+    sudo apt-get install nvidia-driver firmware-misc-nonfree
+    sudo apt-get install nvidia-cuda-dev nvidia-cuda-toolkit libnvidia-encode1
+
 
     clear
 }
@@ -165,7 +167,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments" "flathub md.obsidian.Obsidian")
+    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
