@@ -138,18 +138,18 @@ installInstellijIdeaCommunity() {
 
 installDriversNvidia() {
     
-    echo "Instalando drivers da NVIDIA..."
-
     sudo nano /etc/apt/sources.list
     
-    echo "Atualizando pacotes"
+    echo "Atualizando pacotes..."
     sudo apt-get update
     sudo apt-get upgrade
+    
+    clear
 
+    echo "Instalando drivers da NVIDIA..."
     sudo apt-get install nvidia-detect linux-headers-amd64 -y
     sudo apt-get install nvidia-driver firmware-misc-nonfree -y
     sudo apt-get install nvidia-cuda-dev nvidia-cuda-toolkit libnvidia-encode1 -y
-
 
     clear
 }
