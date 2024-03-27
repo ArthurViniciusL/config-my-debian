@@ -1,12 +1,12 @@
 #!/bin/bash
 
-#v 2.0.4
+#v 2.0.5
 
 startMain() {
     atualizacoes
     installDevThings
     installApps
-    removenApps
+    removeApps
     installDriversNvidia
     installApps
     installFlatpak
@@ -60,7 +60,7 @@ installDevThings() {
 installApps() {    
     echo "Instalando pacotes em .deb..."
     
-    appsFromRepository=("gnome-console" "gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape" "kdenlive");
+    appsFromRepository=("gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape" "kdenlive");
         
     for appsFromRepository in "${appsFromRepository[@]}"
     do
@@ -72,24 +72,26 @@ installApps() {
     installSpotify
     installVsCode
     installInstellijIdeaCommunity
+    installFirefox
 
     clear
-    cd /home/arthur
+    cd /
+    cd /home/arthur/.mozilla/
     echo "Aplicando estilos no Firefox"
     curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
     
     clear
 }
 
-removenApps() {
+removeApps() {
     
     echo "Removendo alguns apps que eu nao uso..."
 
-    appsUnsed=("cheese" "evolution" "zutty" "shotwell" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "gnome-terminal" "kdeconnect")
+    appsUnsed=("cheese" "firefox-esr" "evolution" "zutty" "shotwell" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "kdeconnect")
 
     for appsUnsed in "${appsUnsed[@]}"
     do
-        sudo apt remove -y $appsUnsed
+        sudo apt remove --purge -y $appsUnsed
     done
 
     clear
@@ -136,6 +138,21 @@ installInstellijIdeaCommunity() {
     clear
 }
 
+installFirefox() {
+    sudo install -d -m 0755 /etc/apt/keyrings
+    apt-get install wget
+
+    wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+    gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc | awk '/pub/{getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nO fingerprint da chave corresponde ("$0").\n"; else print "\nFalha na verificação: o fingerprint ("$0") não corresponde ao esperado.\n"}'
+    echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
+    echo '
+    Package: *
+    Pin: origin packages.mozilla.org
+    Pin-Priority: 1000
+    ' | sudo tee /etc/apt/preferences.d/mozilla
+    sudo apt-get update && sudo apt-get install firefox
+}
+
 installDriversNvidia() {
     
     sudo nano /etc/apt/sources.list
@@ -167,7 +184,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub io.github.flattool.Warehouse" "flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "flathub io.github.mrvladus.List" "de.haeckerfelix.Fragments" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub io.github.Figma_Linux.figma_linux")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
