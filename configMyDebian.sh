@@ -23,7 +23,7 @@ atualizacoes() {
 }
 
 addSudoUser() {
-        
+
     echo "Adicionando usuário sudo..."
 
     
@@ -51,17 +51,17 @@ installDevThings() {
     
     for devThings in "${devThings[@]}"
     do
-        sudo apt-get install -y $devThings
+	sudo apt-get install -y $devThings
     done
     
     clear
 }
 
 installApps() {    
-    echo "Instalando pacotes em .deb..."
+    echo "Instalando pacotes do apt..."
     
     appsFromRepository=("gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape" "kdenlive");
-        
+
     for appsFromRepository in "${appsFromRepository[@]}"
     do
       sudo apt-get install -y $appsFromRepository
@@ -91,7 +91,7 @@ removeApps() {
 
     for appsUnsed in "${appsUnsed[@]}"
     do
-        sudo apt remove --purge -y $appsUnsed
+	sudo apt remove --purge -y $appsUnsed
     done
 
     clear
@@ -102,7 +102,7 @@ removeApps() {
  
     for jogos in "${jogos[@]}"
     do
-        sudo apt remove -y $jogos
+	sudo apt remove -y $jogos
     done
 
     clear
@@ -154,7 +154,6 @@ installFirefox() {
 }
 
 installDriversNvidia() {
-    
     sudo nano /etc/apt/sources.list
     
     echo "Atualizando pacotes..."
@@ -184,11 +183,11 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub io.github.Figma_Linux.figma_linux")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub io.github.Figma_Linux.figma_linux", "flathub org.gnome.Totem", "flathub org.gnome.Builder")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
-        flatpak install -y $appsFlatpak
+	flatpak install -y $appsFlatpak
     done
 
     clear
