@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#v 2.0.5
+#v 2.0.6
 
 startMain() {
     atualizacoes
@@ -25,7 +25,6 @@ atualizacoes() {
 addSudoUser() {
 
     echo "Adicionando usuário sudo..."
-
     
     sudo nano /etc/sudoers
     
@@ -33,6 +32,8 @@ addSudoUser() {
 
     echo "Instalando o sudo..."   
     userName=$USER
+    clear
+    echo username
     apt install -y sudo
     adduser $userName sudo
     
@@ -60,7 +61,7 @@ installDevThings() {
 installApps() {    
     echo "Instalando pacotes do apt..."
     
-    appsFromRepository=("gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape" "kdenlive");
+    appsFromRepository=("gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape" "kdenlive" "touchegg");
 
     for appsFromRepository in "${appsFromRepository[@]}"
     do
@@ -73,13 +74,6 @@ installApps() {
     installVsCode
     installInstellijIdeaCommunity
     installFirefox
-
-    clear
-    cd /
-    cd /home/arthur/.mozilla/
-    echo "Aplicando estilos no Firefox"
-    curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
-    
     clear
 }
 
@@ -87,7 +81,7 @@ removeApps() {
     
     echo "Removendo alguns apps que eu nao uso..."
 
-    appsUnsed=("cheese" "firefox-esr" "evolution" "zutty" "shotwell" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "kdeconnect" "totem")
+    appsUnsed=("cheese" "firefox-esr" "evolution" "zutty" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "kdeconnect" "totem")
 
     for appsUnsed in "${appsUnsed[@]}"
     do
@@ -110,10 +104,9 @@ removeApps() {
 
 installSpotify() {
     # Instala o spotify .deb
-    sudo curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
-    echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
-    sudo apt-get update
-    sudo apt-get install -y spotify-client
+	curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
+	echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
+	sudo apt-get update && sudo apt-get install spotify-client -y
 
     clear
 }
@@ -139,18 +132,27 @@ installInstellijIdeaCommunity() {
 }
 
 installFirefox() {
+    sudo apt-get install wget
+    
     sudo install -d -m 0755 /etc/apt/keyrings
-    apt-get install wget
-
     wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
     gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc | awk '/pub/{getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nO fingerprint da chave corresponde ("$0").\n"; else print "\nFalha na verificação: o fingerprint ("$0") não corresponde ao esperado.\n"}'
     echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
     echo '
-    Package: *
-    Pin: origin packages.mozilla.org
-    Pin-Priority: 1000
-    ' | sudo tee /etc/apt/preferences.d/mozilla
-    sudo apt-get update && sudo apt-get install firefox
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+' | sudo tee /etc/apt/preferences.d/mozilla
+
+	sudo apt-get update && sudo apt-get install firefox -y
+	
+    clear
+    
+    cd /
+    cd /home/arthur/.mozilla/
+    echo "Aplicando estilos no Firefox"
+    curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
+    
 }
 
 installDriversNvidia() {
