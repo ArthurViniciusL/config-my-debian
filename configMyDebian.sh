@@ -7,8 +7,7 @@ startMain() {
     installDevThings
     installApps
     removeApps
-    installDriversNvidia
-    installApps
+    #installDriversNvidia
     installFlatpak
     installFlatpakPrograms
     addSudoUser
@@ -48,7 +47,7 @@ addSudoUser() {
 installDevThings() {
     echo "Instalando pacotes para desenvolvimento"
 
-    devThings=( "curl" "git" "nodejs npm" "default-jdk" "default-jre")
+    devThings=( "curl" "git" "nodejs npm" "default-jdk" "default-jre" "vim")
     
     for devThings in "${devThings[@]}"
     do
@@ -61,7 +60,7 @@ installDevThings() {
 installApps() {    
     echo "Instalando pacotes do apt..."
     
-    appsFromRepository=("gnome-shell-pomodoro" "obs-studio" "pinhole" "gimp" "inkscape" "kdenlive" "touchegg");
+    appsFromRepository=("gnome-shell-pomodoro" "obs-studio" "gimp" "inkscape" "kdenlive" "touchegg");
 
     for appsFromRepository in "${appsFromRepository[@]}"
     do
@@ -81,7 +80,7 @@ removeApps() {
     
     echo "Removendo alguns apps que eu nao uso..."
 
-    appsUnsed=("cheese" "firefox-esr" "evolution" "zutty" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "kdeconnect" "totem")
+    appsUnsed=("firefox-esr" "evolution" "zutty" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "kdeconnect" "totem" "systemsettings")
 
     for appsUnsed in "${appsUnsed[@]}"
     do
@@ -156,20 +155,7 @@ Pin-Priority: 1000
 }
 
 installDriversNvidia() {
-    sudo nano /etc/apt/sources.list
-    
-    echo "Atualizando pacotes..."
-    sudo apt-get update
-    sudo apt-get upgrade
-    
-    clear
-
-    echo "Instalando drivers da NVIDIA..."
-    sudo apt-get install nvidia-detect linux-headers-amd64 -y
-    sudo apt-get install nvidia-driver firmware-misc-nonfree -y
-    sudo apt-get install nvidia-cuda-dev nvidia-cuda-toolkit libnvidia-encode1 -y
-
-    clear
+	echo "não implementado..."
 }
 
 installFlatpak() {
@@ -185,7 +171,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub com.getpostman.Postman" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail"o "flathub org.gnome.Totem" "flathub com.github.flxzt.rnote")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub rest.insomnia.Insomnia" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail"o "flathub org.gnome.Totem" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
