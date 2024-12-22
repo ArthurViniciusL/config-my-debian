@@ -9,6 +9,7 @@ startMain() {
     removeApps
     installFlatpak
     installFlatpakPrograms
+    installNvidiaDrivers
     addSudoUser
 }
 
@@ -208,6 +209,15 @@ installFlatpakPrograms() {
 
     clear
 }
+
+installNvidiaDrivers() {
+    echo "Instalando Drivers da Nvidia..."
+
+    apt install nvidia-detect -y && clear && nvidia-detect && clear
+    
+    apt install nvidia-driver firmware-misc-nonfree nvidia-cuda-toolkit
+
+ }
 
 startMain
 sudo reboot
