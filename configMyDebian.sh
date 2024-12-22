@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#v 2.0.6
+#v 2.0.7.7
 
 startMain() {
     atualizacoes
