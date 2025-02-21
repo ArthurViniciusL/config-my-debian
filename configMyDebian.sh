@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#v 2.0.7.7
+#v 3.0.0
 
 startMain() {
     atualizacoes
@@ -29,11 +29,8 @@ addSudoUser() {
     
     clear
 
-    echo "Instalando o sudo..."   
-#    userName=$USER
-#    clear
-#    echo username
- 
+    echo "Instalando o sudo..."
+
     apt install sudo -y
     adduser arthur sudo
     
@@ -65,27 +62,25 @@ installDocker() {
     echo "Instalando o docker..."
     # Add Docker's official GPG key:
 
-    sudo apt install ca-certificates curl
+    sudo apt-get install ca-certificates curl
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
     sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-
     # Add the repository to Apt sources:
     echo \
-        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    sudo apt update
 
-    #Install docker packges
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+    sudo apt-get update
 
     clear
 
-    echo "Instalando o docker compose..."
+    echo "Instalando os pacotes docker..."
 
-    sudo apt install docker-compose-plugin -y
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
     docker compose version
 
 }
@@ -136,19 +131,22 @@ removeApps() {
 
 installSpotify() {
     # Instala o spotify .deb
-	curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
-	echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
-	sudo apt-get update && sudo apt-get install spotify-client -y
+    curl -sS https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
+    echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
+
+    sudo apt update 
+    sudo apt install spotify-client -y
 
     clear
 }
 
 installVsCode() {
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-    sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft-archive-keyring.gpg
-    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-    sudo apt-get update
-    sudo apt-get install -y code
+    sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/keyrings/microsoft-archive-keyring.gpg
+    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+
+    sudo apt update
+    sudo apt install code
 
     clear
 }
@@ -157,6 +155,7 @@ installInstellijIdeaCommunity() {
     # Instala o IntelliJ community
     curl -s https://s3.eu-central-1.amazonaws.com/jetbrains-ppa/0xA6E8698A.pub.asc | gpg --dearmor | sudo tee /usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg > /dev/null
     echo "deb [signed-by=/usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg] http://jetbrains-ppa.s3-website.eu-central-1.amazonaws.com any main" | sudo tee /etc/apt/sources.list.d/jetbrains-ppa.list > /dev/null
+
     sudo apt update
     sudo apt install  -y intellij-idea-community
 
@@ -200,7 +199,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub org.gnome.Totem" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub io.github.zen_browser.zen" "flathub com.discordapp.Discord")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub io.github.zen_browser.zen" "flathub com.discordapp.Discord" "flathub org.gnome.Showtime" "rest.insomnia.Insomnia")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
