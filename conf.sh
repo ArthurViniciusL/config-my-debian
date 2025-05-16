@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#v 4.0.0
+#v 4.0.2
 
 startMain() {
     atualizacoes
@@ -109,7 +109,8 @@ installApps() {
     sudo dpkg -i insomnia.deb
     rm insomnia.deb
 
-    #Install 
+    #Install Brave
+    curl -fsS https://dl.brave.com/install.sh | sh
 
     clear
 }
@@ -207,7 +208,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "rest.insomnia.Insomnia")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
@@ -227,6 +228,7 @@ installNvidiaDrivers() {
 
 hiddenGrub() {
   sudo nano /etc/default/grub
+  sudo update-grub
 }
 
 startMain
