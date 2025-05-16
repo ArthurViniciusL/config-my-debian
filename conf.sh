@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#v 3.0.0
+#v 4.0.0
 
 startMain() {
     atualizacoes
@@ -11,6 +11,8 @@ startMain() {
     installFlatpakPrograms
     installNvidiaDrivers
     addSudoUser
+
+    echo 'Reboot this PC...'
 }
 
 atualizacoes() {
@@ -45,7 +47,7 @@ addSudoUser() {
 installDevThings() {
     echo "Instalando pacotes para desenvolvimento"
 
-    devThings=( "curl" "git" "nodejs npm" "default-jdk" "default-jre")
+    devThings=( "wget" "curl" "git" "nodejs npm" "default-jdk" "default-jre")
     
     for devThings in "${devThings[@]}"
     do
@@ -61,7 +63,6 @@ installDocker() {
 
     echo "Instalando o docker..."
     # Add Docker's official GPG key:
-
     sudo apt-get install ca-certificates curl
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
@@ -88,7 +89,7 @@ installDocker() {
 installApps() {    
     echo "Instalando pacotes do apt..."
     
-    appsFromRepository=("gnome-shell-pomodoro" "obs-studio" "gimp" "inkscape" "kdenlive" "touchegg" "google-chrome-stable" "gnome-shell-extension-gsconnect" "insomnia");
+    appsFromRepository=("gnome-shell-pomodoro" "gnome-console" "gnome-shell-extension-manager" "obs-studio" "gimp" "inkscape" "kdenlive" "touchegg" "google-chrome-stable" "gnome-shell-extension-gsconnect" "chromium");
 
     for appsFromRepository in "${appsFromRepository[@]}"
     do
@@ -99,8 +100,16 @@ installApps() {
     
     installSpotify
     installVsCode
-    installInstellijIdeaCommunity
+    installJetBrainsIDEs
     installFirefox
+
+    #Install insomnia
+    wget -O insomnia.deb "https://updates.insomnia.rest/downloads/ubuntu/latest?&app=com.insomnia.app&source=website"
+    sudo dpkg -i insomnia.deb -f
+    rm insomnia.deb
+
+    #Install 
+
     clear
 }
 
@@ -130,9 +139,9 @@ removeApps() {
 }
 
 installSpotify() {
-    # Instala o spotify .deb
+   
     curl -sS https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
-    echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
+    echo "deb https://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
 
     sudo apt update 
     sudo apt install spotify-client -y
@@ -141,6 +150,7 @@ installSpotify() {
 }
 
 installVsCode() {
+    
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
     sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/keyrings/microsoft-archive-keyring.gpg
     sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
@@ -151,40 +161,37 @@ installVsCode() {
     clear
 }
 
-installInstellijIdeaCommunity() {
-    # Instala o IntelliJ community
+installJetBrainsIDEs() {
     curl -s https://s3.eu-central-1.amazonaws.com/jetbrains-ppa/0xA6E8698A.pub.asc | gpg --dearmor | sudo tee /usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg > /dev/null
     echo "deb [signed-by=/usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg] http://jetbrains-ppa.s3-website.eu-central-1.amazonaws.com any main" | sudo tee /etc/apt/sources.list.d/jetbrains-ppa.list > /dev/null
 
     sudo apt update
-    sudo apt install  -y intellij-idea-community
+    
+    sudo apt install -y intellij-idea-community
+    sudo apt install -y webstorm
 
     clear
 }
 
-#installFirefox() {
-#    sudo apt-get install wget
-    
-#    sudo install -d -m 0755 /etc/apt/keyrings
-#    wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
-#    gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc | awk '/pub/{getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nO fingerprint da chave corresponde ("$0").\n"; else print "\nFalha na verificação: o fingerprint ("$0") não corresponde ao esperado.\n"}'
-#    echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
-#    echo '
-#Package: *
-#Pin: origin packages.mozilla.org
-#Pin-Priority: 1000
-#' | sudo tee /etc/apt/preferences.d/mozilla
+installFirefox() {
+ sudo install -d -m 0755 /etc/apt/keyrings
+ sudo apt install wget -y
 
-#	sudo apt-get update && sudo apt-get install firefox -y
-	
-#    clear
-    
-#    cd /
-#    cd /home/arthur/.mozilla/
-#    echo "Aplicando estilos no Firefox"
-#    curl -s -o- https://raw.githubusercontent.com/rafaelmardojai/firefox-gnome-theme/master/scripts/install-by-curl.sh | bash
-    
-#}
+ wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+
+ gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc | awk '/pub/{getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nThe key fingerprint matches ("$0").\n"; else print "\nVerification failed: the fingerprint ("$0") does not match the expected one.\n"}'
+
+ echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
+
+ echo '
+ 	Package: * 
+	Pin: origin packages.mozilla.org
+	Pin-Priority: 1000
+      ' | sudo tee /etc/apt/preferences.d/mozilla
+
+
+ sudo apt-get update && sudo apt-get install firefox
+}
 
 installFlatpak() {
     echo "Instalando o suporte a flatpak..."
@@ -199,7 +206,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub io.github.zen_browser.zen" "flathub com.discordapp.Discord" "flathub org.gnome.Showtime" "rest.insomnia.Insomnia")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "rest.insomnia.Insomnia")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
@@ -219,4 +226,3 @@ installNvidiaDrivers() {
  }
 
 startMain
-sudo reboot
