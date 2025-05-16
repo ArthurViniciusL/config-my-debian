@@ -11,6 +11,7 @@ startMain() {
     installFlatpakPrograms
     installNvidiaDrivers
     addSudoUser
+    hiddenGrub
 
     echo 'Reboot this PC...'
 }
@@ -105,7 +106,7 @@ installApps() {
 
     #Install insomnia
     wget -O insomnia.deb "https://updates.insomnia.rest/downloads/ubuntu/latest?&app=com.insomnia.app&source=website"
-    sudo dpkg -i insomnia.deb -f
+    sudo dpkg -i insomnia.deb
     rm insomnia.deb
 
     #Install 
@@ -206,7 +207,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.shiftey.Desktop" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "rest.insomnia.Insomnia")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "rest.insomnia.Insomnia")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
@@ -222,7 +223,10 @@ installNvidiaDrivers() {
     apt install nvidia-detect -y && clear && nvidia-detect && clear
     
     apt install nvidia-driver firmware-misc-nonfree nvidia-cuda-toolkit
-
  }
+
+hiddenGrub() {
+  sudo nano /etc/default/grub
+}
 
 startMain
