@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#v 4.0.2
+#v 4.0.0
 
 startMain() {
     atualizacoes
@@ -55,6 +55,9 @@ installDevThings() {
 	sudo apt-get install -y $devThings
     done
 
+    installVsCode
+    installJetBrainsIDEs
+
     installDocker
     
     clear
@@ -100,8 +103,6 @@ installApps() {
     clear
     
     installSpotify
-    installVsCode
-    installJetBrainsIDEs
     installFirefox
 
     #Install insomnia
@@ -109,8 +110,7 @@ installApps() {
     sudo dpkg -i insomnia.deb
     rm insomnia.deb
 
-    #Install Brave
-    curl -fsS https://dl.brave.com/install.sh | sh
+    #Install 
 
     clear
 }
@@ -170,7 +170,6 @@ installJetBrainsIDEs() {
     sudo apt update
     
     sudo apt install -y intellij-idea-community
-    sudo apt install -y webstorm
 
     clear
 }
@@ -208,7 +207,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "rest.insomnia.Insomnia")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
