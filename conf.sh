@@ -29,83 +29,30 @@ updateSystem() {
     clear
 }
 
-hiddenGrub() {
-
-    read -p "Hide GRUB? (y/n): " choice
-
-    if [ $choice == "y" || $choice == "Y"  || $choice == "yes" || $choice == "YES" ]; then
-    
-    sudo tee /etc/default/grub > /dev/null << 'EOF'
-# If you change this file, run 'update-grub' afterwards to update
-# /boot/grub/grub.cfg.
-# For full documentation of the options in this file, see:
-#   info -f grub -n 'Simple configuration'
-
-# Save the file to confirm...
-
-GRUB_DEFAULT=0
-GRUB_TIMEOUT=0
-GRUB_HIDDEN_TIMEOUT_QUIET=true
-GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
-GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
-GRUB_CMDLINE_LINUX=""
-
-# If your computer has multiple operating systems installed, then you
-# probably want to run os-prober. However, if your computer is a host
-# for guest OSes installed via LVM or raw disk devices, running
-# os-prober can cause damage to those guest OSes as it mounts
-# filesystems to look for things.
-#GRUB_DISABLE_OS_PROBER=false
-
-# Uncomment to enable BadRAM filtering, modify to suit your needs
-# This works with Linux (no patch required) and with any kernel that obtains
-# the memory map information from GRUB (GNU Mach, kernel of FreeBSD ...)
-#GRUB_BADRAM="0x01234567,0xfefefefe,0x89abcdef,0xefefefef"
-
-# Uncomment to disable graphical terminal
-GRUB_TERMINAL=console
-
-# The resolution used on graphical terminal
-# note that you can use only modes which your graphic card supports via VBE
-# you can see them in real GRUB with the command `vbeinfo'
-GRUB_GFXMODE=1920x1080
-GRUB_GFXPAYLOAD_LINUX=1920x1080
-
-# Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
-#GRUB_DISABLE_LINUX_UUID=true
-
-# Uncomment to disable generation of recovery mode menu entries
-#GRUB_DISABLE_RECOVERY="true"
-
-# Uncomment to get a beep at grub start
-#GRUB_INIT_TUNE="480 440 1"
-
-EOF
-
-    sudo nano /etc/default/grub
-    sudo update-grub
-
-    else 
-        echo "Ok..."
-
-    fi
-    
-    clear
-}
-
-
 addSudoUser() {
 
-    echo "Adicionando usuário sudo..."
-    
-    sudo nano /etc/sudoers
-    
-    clear
+    read -p "Add super user? (y/n): " choice
 
-    echo "Instalando o sudo..."
+    if [[ "$choice" == "y" || "$choice" == "Y" || "$choice" == "yes" || "$choice" == "YES" ]]; then
 
-    apt install sudo -y
-    adduser arthur sudo
+        echo "Installing sudo..."
+
+        apt install sudo -y
+
+        clear
+
+	read -p "Enter your username: " username
+
+        echo "Adding $username to sudo group..."
+        sudo usermod -aG sudo "$username"
+
+        sudo cp /etc/sudoers /etc/sudoers.bak
+        echo "$username   ALL=(ALL:ALL) ALL" | sudo EDITOR='tee -a' visudo
+
+        echo "User $username added as sudoer successfully!"
+
+        sudo nano /etc/sudoers
+    fi
     
     clear
     
@@ -307,6 +254,70 @@ installNvidiaDrivers() {
     apt install nvidia-detect -y && clear && nvidia-detect && clear
     
     apt install nvidia-driver firmware-misc-nonfree nvidia-cuda-toolkit
+}
+
+hiddenGrub() {
+
+    read -p "Hide GRUB? (y/n): " choice
+
+    if [[ "$choice" == "y" || "$choice" == "Y" || "$choice" == "yes" || "$choice" == "YES" ]]; then
+    
+    sudo tee /etc/default/grub > /dev/null << 'EOF'
+# If you change this file, run 'update-grub' afterwards to update
+# /boot/grub/grub.cfg.
+# For full documentation of the options in this file, see:
+#   info -f grub -n 'Simple configuration'
+
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=0
+GRUB_HIDDEN_TIMEOUT_QUIET=true
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_CMDLINE_LINUX=""
+
+# If your computer has multiple operating systems installed, then you
+# probably want to run os-prober. However, if your computer is a host
+# for guest OSes installed via LVM or raw disk devices, running
+# os-prober can cause damage to those guest OSes as it mounts
+# filesystems to look for things.
+#GRUB_DISABLE_OS_PROBER=false
+
+# Uncomment to enable BadRAM filtering, modify to suit your needs
+# This works with Linux (no patch required) and with any kernel that obtains
+# the memory map information from GRUB (GNU Mach, kernel of FreeBSD ...)
+#GRUB_BADRAM="0x01234567,0xfefefefe,0x89abcdef,0xefefefef"
+
+# Uncomment to disable graphical terminal
+GRUB_TERMINAL=console
+
+# The resolution used on graphical terminal
+# note that you can use only modes which your graphic card supports via VBE
+# you can see them in real GRUB with the command `vbeinfo'
+GRUB_GFXMODE=1920x1080
+GRUB_GFXPAYLOAD_LINUX=1920x1080
+
+# Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
+#GRUB_DISABLE_LINUX_UUID=true
+
+# Uncomment to disable generation of recovery mode menu entries
+#GRUB_DISABLE_RECOVERY="true"
+
+# Uncomment to get a beep at grub start
+#GRUB_INIT_TUNE="480 440 1"
+
+# Save the file to confirm...
+
+EOF
+
+    sudo nano /etc/default/grub
+    sudo update-grub
+
+    else 
+        echo "Ok..."
+
+    fi
+    
+    clear
 }
 
 startMain
