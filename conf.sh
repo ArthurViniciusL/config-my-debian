@@ -3,23 +3,27 @@
 #v 4.0.3
 
 startMain() {
-    atualizacoes
-    installDevThings
+    updateSystem
+    installFlatpak
+    hiddenGrub    
+    addSudoUser
+    installNvidiaDrivers
+
+    installDevTools
+
     installApps
     removeApps
-    installFlatpak
-    installFlatpakPrograms
-    installNvidiaDrivers
-    addSudoUser
-    hiddenGrub
+
+    # installFlatpakPrograms
 
     echo 'Reboot this PC...'
 }
 
-atualizacoes() {
+updateSystem() {
+
     echo "Fazendo atualizacoes..."
-    sudo apt-get update
-    sudo apt-get upgrade
+    sudo apt update
+    sudo apt upgrade
 
     clear
 }
@@ -43,51 +47,6 @@ addSudoUser() {
     apt upgrade
 
     clear
-}
-
-installDevThings() {
-    echo "Instalando pacotes para desenvolvimento"
-
-    devThings=( "wget" "curl" "git" "nodejs npm" "default-jdk" "default-jre")
-    
-    for devThings in "${devThings[@]}"
-    do
-	sudo apt-get install -y $devThings
-    done
-
-    installVsCode
-    installJetBrainsIDEs
-
-    installDocker
-    
-    clear
-}
-
-installDocker() {
-
-    echo "Instalando o docker..."
-    # Add Docker's official GPG key:
-    sudo apt-get install ca-certificates curl
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-    # Add the repository to Apt sources:
-    echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-    sudo apt-get update
-
-    clear
-
-    echo "Instalando os pacotes docker..."
-
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-
-    docker compose version
-
 }
 
 installApps() {    
@@ -149,7 +108,38 @@ installSpotify() {
     clear
 }
 
-installVsCode() {
+installDevTools() {
+    echo "Instalando pacotes para desenvolvimento..."
+
+    packages=( "wget" "curl" "git" "nodejs npm" "default-jdk" "default-jre")
+    
+    for packages in "${packages[@]}"
+    do
+	    sudo apt-get install -y $packages
+    done
+
+    clear
+
+    echo "Instalandos IDE's..."
+
+    visualStudioCode
+    intelliJIdea
+
+    clear
+
+    echo "Instalandos o Docker..."
+    docker
+
+    echo "Instalando o Gemini CLI..."
+    
+    npm install -g @google/gemini-cli
+
+    clear
+}
+
+visualStudioCode() {
+
+    echo "Instalando o Visual Studio Code..."
     
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
     sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/keyrings/microsoft-archive-keyring.gpg
@@ -161,13 +151,43 @@ installVsCode() {
     clear
 }
 
-installJetBrainsIDEs() {
+intelliJIdea() {
+
+    echo "Instalando o Intellij Idea Community..."
+
     curl -s https://s3.eu-central-1.amazonaws.com/jetbrains-ppa/0xA6E8698A.pub.asc | gpg --dearmor | sudo tee /usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg > /dev/null
     echo "deb [signed-by=/usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg] http://jetbrains-ppa.s3-website.eu-central-1.amazonaws.com any main" | sudo tee /etc/apt/sources.list.d/jetbrains-ppa.list > /dev/null
 
     sudo apt update
     
     sudo apt install -y intellij-idea-community
+
+    clear
+}
+
+docker() {
+
+    # Add Docker's official GPG key:
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    sudo apt-get update
+
+    clear
+
+    echo "Instalando os pacotes docker..."
+
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+    docker compose version
 
     clear
 }
