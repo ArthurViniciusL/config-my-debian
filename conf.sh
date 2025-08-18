@@ -93,7 +93,7 @@ removeApps() {
     
     echo "Removendo alguns apps que eu nao uso..."
 
-    appsUnsed=("firefox-esr" "evolution" "zutty" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "kdeconnect" "totem" "systemsettings")
+    appsUnsed=("firefox-esr" "kdeconnect" "totem" "systemsettings")
 
     for appsUnsed in "${appsUnsed[@]}"
     do
