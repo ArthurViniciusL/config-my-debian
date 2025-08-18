@@ -79,7 +79,8 @@ installApps() {
     clear
     
     installSpotify
-    installFirefox
+    #installFirefox
+    installBrowser
 
     #Install insomnia
     wget -O insomnia.deb "https://updates.insomnia.rest/downloads/ubuntu/latest?&app=com.insomnia.app&source=website"
@@ -119,8 +120,62 @@ installSpotify() {
     curl -sS https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
     echo "deb https://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
 
-    sudo apt update 
-    sudo apt install spotify-client -y
+
+    sudo apt-get update && sudo apt-get install spotify-client
+
+    clear
+}
+
+installBrowser() {
+    browsers=("Google Chrome" "Firefox" "Chromium" "Brave")
+
+    echo "Select a browser to install:"
+    for i in "${!browsers[@]}"; do
+        echo "[$((i+1))] ${browsers[i]}"
+    done
+
+    read -p "Type here (e.g. 1 2 3): " -a option
+
+    #local packages_to_install=()
+
+    for num in "${option[@]}"; do
+        if ! [[ "$num" =~ ^[0-9]+$ ]] || [ "$num" -lt 1 ] || [ "$num" -gt ${#browsers[@]} ]; then
+            echo " -> Invalid option ($num)"
+            continue
+        fi
+
+        idx=$((num-1))
+        browser_name=${browsers[$idx]}
+        echo " -> Queuing ${browser_name} for installation..."
+
+                case "$num" in
+            1) # Google Chrome
+                if wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; then
+                    sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
+                    rm -f google-chrome-stable_current_amd64.deb
+                else
+                    echo "Falha ao baixar o instalador do Google Chrome."
+                fi
+                ;;
+            2) # Firefox
+                if command -v installFirefox &>/dev/null; then
+                    installFirefox
+                else
+                    echo "Função 'installFirefox' não encontrada. Abortando instalação do Firefox."
+                fi
+                ;;
+            3) # Chromium
+                sudo apt-get update && sudo apt-get install -y chromium-browser || echo "Falha ao instalar o Chromium."
+                ;;
+            4) # Brave
+                if curl -fsS https://dl.brave.com/install.sh | sh; then
+                    echo "Brave instalado com sucesso."
+                else
+                    echo "Falha ao configurar repositório do Brave."
+                fi
+                ;;
+        esac
+    done
 
     clear
 }
@@ -162,6 +217,7 @@ visualStudioCode() {
     sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/keyrings/microsoft-archive-keyring.gpg
     sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
 
+
     sudo apt update
     sudo apt install code
 
@@ -174,7 +230,7 @@ intelliJIdea() {
 
     curl -s https://s3.eu-central-1.amazonaws.com/jetbrains-ppa/0xA6E8698A.pub.asc | gpg --dearmor | sudo tee /usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg > /dev/null
     echo "deb [signed-by=/usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg] http://jetbrains-ppa.s3-website.eu-central-1.amazonaws.com any main" | sudo tee /etc/apt/sources.list.d/jetbrains-ppa.list > /dev/null
-
+    
     sudo apt update
     
     sudo apt install -y intellij-idea-community
@@ -253,14 +309,18 @@ installFlatpakPrograms() {
 }
 
 installNvidiaDrivers() {
+
+    sudo nano /etc/apt/sources.list
+
+    sudo apt update
+    sudo apt upgrade -y
+
     echo "Instalando Drivers da Nvidia..."
 
     apt install nvidia-detect -y && clear && nvidia-detect && clear
     
     apt install nvidia-driver firmware-misc-nonfree nvidia-cuda-toolkit
 }
-
-// TODO melhorar essa parte da escrita no arquivo:
 
 hiddenGrub() {
 
