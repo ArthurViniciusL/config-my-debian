@@ -5,12 +5,10 @@
 startMain() {
 
     updateSystem
-    hiddenGrub    
+    hiddenGrub
+    addSudoUser
     
-    # habilitar o repositorio não livre
     installNvidiaDrivers
-
-    # preiorizar programas em flatpak?
     
     installFlatpak
 
@@ -19,7 +17,7 @@ startMain() {
     installApps
     removeApps
 
-    # installFlatpakPrograms
+    installFlatpakPrograms
 
     echo 'Reboot this PC...'
 }
@@ -69,11 +67,11 @@ addSudoUser() {
 installApps() {    
     echo "Instalando pacotes do apt..."
     
-    appsFromRepository=("gnome-shell-pomodoro" "gnome-console" "gnome-shell-extension" "obs-studio" "gimp" "inkscape" "kdenlive" "touchegg" "gnome-shell-extension-gsconnect" "chromium");
+    appsFromRepository=("gnome-shell-pomodoro" "gnome-console" "gnome-shell-extension-manager" "obs-studio" "gimp" "inkscape" "kdenlive" "touchegg" "gnome-shell-extension-gsconnect" "chromium");
 
-    for appsFromRepository in "${appsFromRepository[@]}"
+    for app in "${appsFromRepository[@]}"
     do
-      sudo apt-get install -y $appsFromRepository
+      sudo apt-get install -y "$app"
     done
     
     clear
@@ -175,9 +173,9 @@ removeApps() {
 
     appsUnsed=("firefox-esr" "kdeconnect" "totem" "systemsettings")
 
-    for appsUnsed in "${appsUnsed[@]}"
+    for app in "${appsUnsed[@]}"
     do
-	sudo apt remove --purge -y $appsUnsed
+	sudo apt remove --purge -y "$app"
     done
 
     clear
@@ -186,9 +184,9 @@ removeApps() {
 
     jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "four-in-a-row" "iagno" "swell-foop" "gnome-klotski" "five-or-more" "gnome-robots" "gnome-tetravex" "gnome-taquin" "lightsoff" "gnome-mahjongg" "aisleriot" "gnome-nibbles" "gnome-chess" "tali" "hitori")
  
-    for jogos in "${jogos[@]}"
+    for jogo in "${jogos[@]}"
     do
-	sudo apt remove -y $jogos
+	sudo apt remove -y "$jogo"
     done
 
     clear
@@ -207,37 +205,37 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Installing flatpak apps..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "flathub io.bassi.Amberol" "flathub org.gnome.Showtime")
+    appsFlatpak=("fr.handbrake.ghb" "io.github.mrvladus.List" "org.gnome.design.IconLibrary" "com.github.huluti.Curtail" "com.github.flxzt.rnote" "com.github.unrud.VideoDownloader" "com.discordapp.Discord" "io.bassi.Amberol" "org.gnome.Showtime")
 
-    for appsFlatpak in "${appsFlatpak[@]}"
+    for app in "${appsFlatpak[@]}"
     do
-	flatpak install -y $appsFlatpak
+	flatpak install -y flathub "$app"
     done
 
     clear
 }
 
 installDevTools() {
-    echo "Installing develop packges..."
+    echo "Installing develop packages..."
 
-    packages=( "wget" "curl" "git" "nodejs npm" "default-jdk" "default-jre")
+    packages=("wget" "curl" "git" "nodejs" "npm" "default-jdk" "default-jre")
     
-    for packages in "${packages[@]}"
+    for pkg in "${packages[@]}"
     do
-	    sudo apt-get install -y $packages
+	    sudo apt-get install -y "$pkg"
     done
 
     clear
 
-    echo "Instalandos IDE's..."
+    echo "Installing IDE's..."
 
-    visualStudioCode
-    intelliJIdea
+    install_visualStudioCode
+    install_intelliJIdea
 
     clear
 
     echo "Installing Docker..."
-    docker
+    install_docker
 
     echo "Installing Gemini CLI..."
     
@@ -251,7 +249,7 @@ installDevTools() {
     clear
 }
 
-visualStudioCode() {
+install_visualStudioCode() {
 
     echo "Installing Visual Studio Code..."
     
@@ -266,7 +264,7 @@ visualStudioCode() {
     clear
 }
 
-intelliJIdea() {
+install_intelliJIdea() {
 
     echo "Installing Intellij Idea Community..."
 
@@ -280,7 +278,7 @@ intelliJIdea() {
     clear
 }
 
-docker() {
+install_docker() {
 
     # Add Docker's official GPG key:
     sudo apt-get install ca-certificates curl
@@ -302,7 +300,9 @@ docker() {
 
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
-    docker compose version
+    # Use 'command' to ensure we are calling the docker executable
+    # and not this function, even though we renamed it. It's a good practice.
+    command docker compose version
 
     clear
 }
