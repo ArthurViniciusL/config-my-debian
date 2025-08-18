@@ -3,12 +3,16 @@
 #v 4.0.3
 
 startMain() {
+
     updateSystem
     hiddenGrub    
-    addSudoUser
+    
+    # habilitar o repositorio não livre
+    installNvidiaDrivers
+
+    # preiorizar programas em flatpak?
     
     installFlatpak
-    installNvidiaDrivers
 
     installDevTools
 
@@ -228,8 +232,8 @@ installFirefox() {
 installFlatpak() {
     echo "Instalando o suporte a flatpak..."
 
-    sudo apt install -y flatpak
-    apt install -y gnome-software-plugin-flatpak
+    sudo apt install flatpak -y
+    sudo apt install gnome-software-plugin-flatpak -y
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
     clear
@@ -238,7 +242,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Instalando flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "flathub io.bassi.Amberol")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "flathub io.bassi.Amberol" "flathub org.gnome.Showtime")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
@@ -255,6 +259,8 @@ installNvidiaDrivers() {
     
     apt install nvidia-driver firmware-misc-nonfree nvidia-cuda-toolkit
 }
+
+// TODO melhorar essa parte da escrita no arquivo:
 
 hiddenGrub() {
 
