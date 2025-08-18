@@ -28,7 +28,7 @@ updateSystem() {
 
     echo "Fazendo atualizacoes..."
     sudo apt update
-    sudo apt upgrade
+    sudo apt upgrade -y
 
     clear
 }
@@ -69,7 +69,7 @@ addSudoUser() {
 installApps() {    
     echo "Instalando pacotes do apt..."
     
-    appsFromRepository=("gnome-shell-pomodoro" "gnome-console" "gnome-shell-extension-manager" "obs-studio" "gimp" "inkscape" "kdenlive" "touchegg" "google-chrome-stable" "gnome-shell-extension-gsconnect" "chromium");
+    appsFromRepository=("gnome-shell-pomodoro" "gnome-console" "gnome-shell-extension" "obs-studio" "gimp" "inkscape" "kdenlive" "touchegg" "gnome-shell-extension-gsconnect" "chromium");
 
     for appsFromRepository in "${appsFromRepository[@]}"
     do
@@ -79,38 +79,7 @@ installApps() {
     clear
     
     installSpotify
-    #installFirefox
     installBrowser
-
-    #Install insomnia
-    wget -O insomnia.deb "https://updates.insomnia.rest/downloads/ubuntu/latest?&app=com.insomnia.app&source=website"
-    sudo dpkg -i insomnia.deb
-    rm insomnia.deb
-
-    clear
-}
-
-removeApps() {
-    
-    echo "Removendo alguns apps que eu nao uso..."
-
-    appsUnsed=("firefox-esr" "kdeconnect" "totem" "systemsettings")
-
-    for appsUnsed in "${appsUnsed[@]}"
-    do
-	sudo apt remove --purge -y $appsUnsed
-    done
-
-    clear
-
-    echo "Removendo jogos..."
-
-    jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "four-in-a-row" "iagno" "swell-foop" "gnome-klotski" "five-or-more" "gnome-robots" "gnome-tetravex" "gnome-taquin" "lightsoff" "gnome-mahjongg" "aisleriot" "gnome-nibbles" "gnome-chess" "tali" "hitori")
- 
-    for jogos in "${jogos[@]}"
-    do
-	sudo apt remove -y $jogos
-    done
 
     clear
 }
@@ -180,8 +149,76 @@ installBrowser() {
     clear
 }
 
+installFirefox() {
+ sudo install -d -m 0755 /etc/apt/keyrings
+ sudo apt install wget -y
+
+ wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+
+ gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc | awk '/pub/{getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nThe key fingerprint matches ("$0").\n"; else print "\nVerification failed: the fingerprint ("$0") does not match the expected one.\n"}'
+
+ echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
+
+ echo '
+ 	Package: * 
+	Pin: origin packages.mozilla.org
+	Pin-Priority: 1000
+      ' | sudo tee /etc/apt/preferences.d/mozilla
+
+
+ sudo apt-get update && sudo apt-get install firefox
+}
+
+removeApps() {
+    
+    echo "Remove some apps..."
+
+    appsUnsed=("firefox-esr" "kdeconnect" "totem" "systemsettings")
+
+    for appsUnsed in "${appsUnsed[@]}"
+    do
+	sudo apt remove --purge -y $appsUnsed
+    done
+
+    clear
+
+    echo "Remove some games..."
+
+    jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "four-in-a-row" "iagno" "swell-foop" "gnome-klotski" "five-or-more" "gnome-robots" "gnome-tetravex" "gnome-taquin" "lightsoff" "gnome-mahjongg" "aisleriot" "gnome-nibbles" "gnome-chess" "tali" "hitori")
+ 
+    for jogos in "${jogos[@]}"
+    do
+	sudo apt remove -y $jogos
+    done
+
+    clear
+}
+
+installFlatpak() {
+    echo "Installing flatpak support..."
+
+    sudo apt install flatpak -y
+    sudo apt install gnome-software-plugin-flatpak -y
+    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+    clear
+}
+
+installFlatpakPrograms() {
+    echo "Installing flatpak apps..."
+
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "flathub io.bassi.Amberol" "flathub org.gnome.Showtime")
+
+    for appsFlatpak in "${appsFlatpak[@]}"
+    do
+	flatpak install -y $appsFlatpak
+    done
+
+    clear
+}
+
 installDevTools() {
-    echo "Instalando pacotes para desenvolvimento..."
+    echo "Installing develop packges..."
 
     packages=( "wget" "curl" "git" "nodejs npm" "default-jdk" "default-jre")
     
@@ -199,19 +236,24 @@ installDevTools() {
 
     clear
 
-    echo "Instalandos o Docker..."
+    echo "Installing Docker..."
     docker
 
-    echo "Instalando o Gemini CLI..."
+    echo "Installing Gemini CLI..."
     
     npm install -g @google/gemini-cli
+
+    # Install insomnia
+    wget -O insomnia.deb "https://updates.insomnia.rest/downloads/ubuntu/latest?&app=com.insomnia.app&source=website"
+    sudo dpkg -i insomnia.deb
+    rm insomnia.deb
 
     clear
 }
 
 visualStudioCode() {
 
-    echo "Instalando o Visual Studio Code..."
+    echo "Installing Visual Studio Code..."
     
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
     sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/keyrings/microsoft-archive-keyring.gpg
@@ -226,7 +268,7 @@ visualStudioCode() {
 
 intelliJIdea() {
 
-    echo "Instalando o Intellij Idea Community..."
+    echo "Installing Intellij Idea Community..."
 
     curl -s https://s3.eu-central-1.amazonaws.com/jetbrains-ppa/0xA6E8698A.pub.asc | gpg --dearmor | sudo tee /usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg > /dev/null
     echo "deb [signed-by=/usr/share/keyrings/jetbrains-ppa-archive-keyring.gpg] http://jetbrains-ppa.s3-website.eu-central-1.amazonaws.com any main" | sudo tee /etc/apt/sources.list.d/jetbrains-ppa.list > /dev/null
@@ -256,7 +298,7 @@ docker() {
 
     clear
 
-    echo "Instalando os pacotes docker..."
+    echo "Installing docker packges..."
 
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
@@ -265,51 +307,8 @@ docker() {
     clear
 }
 
-installFirefox() {
- sudo install -d -m 0755 /etc/apt/keyrings
- sudo apt install wget -y
-
- wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
-
- gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc | awk '/pub/{getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nThe key fingerprint matches ("$0").\n"; else print "\nVerification failed: the fingerprint ("$0") does not match the expected one.\n"}'
-
- echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
-
- echo '
- 	Package: * 
-	Pin: origin packages.mozilla.org
-	Pin-Priority: 1000
-      ' | sudo tee /etc/apt/preferences.d/mozilla
-
-
- sudo apt-get update && sudo apt-get install firefox
-}
-
-installFlatpak() {
-    echo "Instalando o suporte a flatpak..."
-
-    sudo apt install flatpak -y
-    sudo apt install gnome-software-plugin-flatpak -y
-    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
-    clear
-}
-
-installFlatpakPrograms() {
-    echo "Instalando flatpaks..."
-
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "flathub io.bassi.Amberol" "flathub org.gnome.Showtime")
-
-    for appsFlatpak in "${appsFlatpak[@]}"
-    do
-	flatpak install -y $appsFlatpak
-    done
-
-    clear
-}
-
 installNvidiaDrivers() {
-
+    # /etc/sources.list.d/debian.sources
     sudo nano /etc/apt/sources.list
 
     sudo apt update
