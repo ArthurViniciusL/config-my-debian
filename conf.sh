@@ -5,8 +5,6 @@
 # version: 5.0.0
 # description: Script to automate my post-installation process on Debian
 # compat: debian
-# reboot: yes
-
 
 startMain() {
 
