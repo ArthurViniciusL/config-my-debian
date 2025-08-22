@@ -21,7 +21,7 @@ startMain() {
     read -p "Hidden GRUB? (y/n): " hidden_grub
     if [[ "$hidden_grub" == "y" || "$hidden_grub" == "Y" ]]; then
         hiddenGrub    
-    fi [[""]] 
+    fi
     
     read -p "Install nvidia drivers? (y/n): " nvidia_drivers
     if [[ "$nvidia_drivers" == "y" || "$nvidia_drivers" == "Y" ]]; then
@@ -63,14 +63,10 @@ addSudoUser() {
     echo "Adding $username to sudo group..."
     sudo usermod -aG sudo "$username"
 
-    sudo cp /etc/sudoers /etc/sudoers.bak
-    echo "$username   ALL=(ALL:ALL) ALL" | sudo EDITOR='tee -a' visudo
+    # The correct and safe way to add a user to the sudoers file without a manual editor session.
+    echo "$username ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers.d/"$username" > /dev/null
 
     echo "User $username added as sudoer successfully!"
-
-    sudo nano /etc/sudoers
-    
-    clear
     
     apt update
     apt upgrade
@@ -83,9 +79,9 @@ installApps() {
     
     appsFromRepository=("gnome-shell-pomodoro" "gnome-console" "gnome-shell-extension-manager" "obs-studio" "gimp" "inkscape" "kdenlive" "touchegg" "google-chrome-stable" "gnome-shell-extension-gsconnect" "chromium");
 
-    for appsFromRepository in "${appsFromRepository[@]}"
+    for app in "${appsFromRepository[@]}"
     do
-      sudo apt-get install -y $appsFromRepository
+      sudo apt-get install -y "$app"
     done
     
     clear
@@ -107,20 +103,20 @@ removeApps() {
 
     appsUnsed=("firefox-esr" "evolution" "zutty" "rhythmbox" "gnome-contacts" "gnome-maps" "vlc" "kdeconnect" "totem" "systemsettings")
 
-    for appsUnsed in "${appsUnsed[@]}"
+    for app in "${appsUnsed[@]}"
     do
-	sudo apt remove --purge -y $appsUnsed
+	sudo apt remove --purge -y "$app"
     done
 
     clear
 
     echo "Removendo jogos..."
 
-    jogos=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "four-in-a-row" "iagno" "swell-foop" "gnome-klotski" "five-or-more" "gnome-robots" "gnome-tetravex" "gnome-taquin" "lightsoff" "gnome-mahjongg" "aisleriot" "gnome-nibbles" "gnome-chess" "tali" "hitori")
+    games=("quadrapassel" "gnome-2048" "gnome-mines" "gnome-sudoku" "four-in-a-row" "iagno" "swell-foop" "gnome-klotski" "five-or-more" "gnome-robots" "gnome-tetravex" "gnome-taquin" "lightsoff" "gnome-mahjongg" "aisleriot" "gnome-nibbles" "gnome-chess" "tali" "hitori")
  
-    for jogos in "${jogos[@]}"
+    for game in "${games[@]}"
     do
-	sudo apt remove -y $jogos
+	sudo apt remove -y "$game"
     done
 
     clear
@@ -140,11 +136,11 @@ installSpotify() {
 installDevTools() {
     echo "Instalando pacotes para desenvolvimento..."
 
-    packages=( "wget" "curl" "git" "nodejs npm" "default-jdk" "default-jre")
+    packages=("wget" "curl" "git" "nodejs" "npm" "default-jdk" "default-jre")
     
-    for packages in "${packages[@]}"
+    for pkg in "${packages[@]}"
     do
-	    sudo apt-get install -y $packages
+	    sudo apt-get install -y "$pkg"
     done
 
     clear
@@ -216,7 +212,7 @@ installDocker() {
 
     echo "Installing docker packages..."
 
-    sudo apt-get install installDocker-ce installDocker-ce-cli containerd.io installDocker-buildx-plugin installDocker-compose-plugin -y
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
     docker compose version
 
@@ -256,9 +252,9 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Installing flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "flathub io.bassi.Amberol" "flathub io.dbeaver.DBeaverCommunity")
+    appsFlatpak=("fr.handbrake.ghb" "io.github.mrvladus.List" "md.obsidian.Obsidian" "org.gabmus.hydrapaper" "org.gnome.design.IconLibrary" "com.github.huluti.Curtail" "com.github.flxzt.rnote" "com.github.unrud.VideoDownloader" "com.discordapp.Discord" "io.bassi.Amberol" "io.dbeaver.DBeaverCommunity")
 
-    for appsFlatpak in "${appsFlatpak[@]}"
+    for app in "${appsFlatpak[@]}"
     do
 	flatpak install -y $appsFlatpak
     done
@@ -283,58 +279,18 @@ installNvidiaDrivers() {
     sudo rm -f cuda-keyring_1.1-1_all.deb
 }
 
-// TODO melhorar essa parte da escrita no arquivo:
-
 hiddenGrub() {
-  
-    sudo tee /etc/default/grub > /dev/null << 'EOF'
-# If you change this file, run 'update-grub' afterwards to update
-# /boot/grub/grub.cfg.
-# For full documentation of the options in this file, see:
-#   info -f grub -n 'Simple configuration'
+    echo "Hiding GRUB menu..."
+    # Create a backup of the original grub file
+    sudo cp /etc/default/grub /etc/default/grub.bak
 
-GRUB_DEFAULT=0
-GRUB_TIMEOUT=0
-GRUB_HIDDEN_TIMEOUT_QUIET=true
-GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
-GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
-GRUB_CMDLINE_LINUX=""
+    # Use sed to modify the file in place. This is safer than overwriting the whole file.
+    sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/' /etc/default/grub
+    sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="quiet"/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/' /etc/default/grub
+    # Add GRUB_HIDDEN_TIMEOUT_QUIET if it doesn't exist
+    grep -qF "GRUB_HIDDEN_TIMEOUT_QUIET" /etc/default/grub || echo "GRUB_HIDDEN_TIMEOUT_QUIET=true" | sudo tee -a /etc/default/grub > /dev/null
 
-# If your computer has multiple operating systems installed, then you
-# probably want to run os-prober. However, if your computer is a host
-# for guest OSes installed via LVM or raw disk devices, running
-# os-prober can cause damage to those guest OSes as it mounts
-# filesystems to look for things.
-#GRUB_DISABLE_OS_PROBER=false
-
-# Uncomment to enable BadRAM filtering, modify to suit your needs
-# This works with Linux (no patch required) and with any kernel that obtains
-# the memory map information from GRUB (GNU Mach, kernel of FreeBSD ...)
-#GRUB_BADRAM="0x01234567,0xfefefefe,0x89abcdef,0xefefefef"
-
-# Uncomment to disable graphical terminal
-GRUB_TERMINAL=console
-
-# The resolution used on graphical terminal
-# note that you can use only modes which your graphic card supports via VBE
-# you can see them in real GRUB with the command `vbeinfo'
-GRUB_GFXMODE=1920x1080
-GRUB_GFXPAYLOAD_LINUX=1920x1080
-
-# Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
-#GRUB_DISABLE_LINUX_UUID=true
-
-# Uncomment to disable generation of recovery mode menu entries
-#GRUB_DISABLE_RECOVERY="true"
-
-# Uncomment to get a beep at grub start
-#GRUB_INIT_TUNE="480 440 1"
-
-# Save the file to confirm...
-
-EOF
-
-    sudo nano /etc/default/grub
+    echo "Updating GRUB configuration..."
     sudo update-grub
     
     clear
