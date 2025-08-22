@@ -12,6 +12,12 @@ startMain() {
 
     updateSystem
 
+    read -p "Add super user? (y/n): " choice
+
+    if [[ "$choice" == "y" || "$choice" == "Y" || "$choice" == "yes" || "$choice" == "YES" ]]; then
+        addSudoUser
+    fi    
+
     read -p "Hidden GRUB? (y/n): " hidden_grub
     if [[ "$hidden_grub" == "y" || "$hidden_grub" == "Y" ]]; then
         hiddenGrub    
@@ -46,28 +52,23 @@ updateSystem() {
 
 addSudoUser() {
 
-    read -p "Add super user? (y/n): " choice
+    echo "Installing sudo..."
 
-    if [[ "$choice" == "y" || "$choice" == "Y" || "$choice" == "yes" || "$choice" == "YES" ]]; then
+    apt install sudo -y
 
-        echo "Installing sudo..."
+    clear
 
-        apt install sudo -y
+    read -p "Enter your username: " username
 
-        clear
+    echo "Adding $username to sudo group..."
+    sudo usermod -aG sudo "$username"
 
-	read -p "Enter your username: " username
+    sudo cp /etc/sudoers /etc/sudoers.bak
+    echo "$username   ALL=(ALL:ALL) ALL" | sudo EDITOR='tee -a' visudo
 
-        echo "Adding $username to sudo group..."
-        sudo usermod -aG sudo "$username"
+    echo "User $username added as sudoer successfully!"
 
-        sudo cp /etc/sudoers /etc/sudoers.bak
-        echo "$username   ALL=(ALL:ALL) ALL" | sudo EDITOR='tee -a' visudo
-
-        echo "User $username added as sudoer successfully!"
-
-        sudo nano /etc/sudoers
-    fi
+    sudo nano /etc/sudoers
     
     clear
     
