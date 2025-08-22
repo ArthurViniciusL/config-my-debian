@@ -3,12 +3,21 @@
 #v 4.0.3
 
 startMain() {
+
     updateSystem
-    hiddenGrub    
-    addSudoUser
+
+    read -p "Hidden GRUB? (y/n): " hidden_grub
+    if [[ "$hidden_grub" == "y" || "$hidden_grub" == "Y" ]]; then
+        hiddenGrub    
+    fi [[""]] 
     
+    read -p "Install nvidia drivers? (y/n): " nvidia_drivers
+    if [[ "$nvidia_drivers" == "y" || "$nvidia_drivers" == "Y" ]]; then
+        installNvidiaDrivers
+    fi
+
+    # preiorizar programas em flatpak?
     installFlatpak
-    installNvidiaDrivers
 
     installDevTools
 
@@ -140,19 +149,21 @@ installDevTools() {
 
     clear
 
-    echo "Instalandos o Docker..."
-    docker
+    echo "Installing Docker..."
+    installDocker
 
-    echo "Instalando o Gemini CLI..."
-    
-    npm install -g @google/gemini-cli
+    read -p "Install Gemini CLI? (y/n): " gemini_cli
+    if [[ "$gemini_cli" == "y" || "$gemini_cli" == "Y" ]]; then
+        echo "Installing Gemini CLI..."
+        npm install -g @google/gemini-cli
+    fi
 
     clear
 }
 
 visualStudioCode() {
 
-    echo "Instalando o Visual Studio Code..."
+    echo "Installing Visual Studio Code..."
     
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
     sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/keyrings/microsoft-archive-keyring.gpg
@@ -178,9 +189,10 @@ intelliJIdea() {
     clear
 }
 
-docker() {
+installDocker() {
 
     # Add Docker's official GPG key:
+    sudo apt-get update
     sudo apt-get install ca-certificates curl
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
@@ -191,14 +203,13 @@ docker() {
     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
     $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
     sudo apt-get update
 
     clear
 
-    echo "Instalando os pacotes docker..."
+    echo "Installing docker packages..."
 
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+    sudo apt-get install installDocker-ce installDocker-ce-cli containerd.io installDocker-buildx-plugin installDocker-compose-plugin -y
 
     docker compose version
 
@@ -226,7 +237,7 @@ installFirefox() {
 }
 
 installFlatpak() {
-    echo "Instalando o suporte a flatpak..."
+    echo "Installing flatpak support..."
 
     sudo apt install -y flatpak
     apt install -y gnome-software-plugin-flatpak
@@ -236,9 +247,9 @@ installFlatpak() {
 }
 
 installFlatpakPrograms() {
-    echo "Instalando flatpaks..."
+    echo "Installing flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "flathub io.bassi.Amberol")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "flathub io.bassi.Amberol" "flathub io.dbeaver.DBeaverCommunity")
 
     for appsFlatpak in "${appsFlatpak[@]}"
     do
@@ -249,19 +260,26 @@ installFlatpakPrograms() {
 }
 
 installNvidiaDrivers() {
-    echo "Instalando Drivers da Nvidia..."
+    echo "Installing nvidia drivers..."
 
-    apt install nvidia-detect -y && clear && nvidia-detect && clear
+    # apt install nvidia-detect -y && clear && nvidia-detect && clear
+    # apt install nvidia-driver firmware-misc-nonfree nvidia-cuda-toolkit
+
+    # add Nvidia repository for Debian
+    wget https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/cuda-keyring_1.1-1_all.deb
+    sudo dpkg -i cuda-keyring_1.1-1_all.deb
+    sleep 1
     
-    apt install nvidia-driver firmware-misc-nonfree nvidia-cuda-toolkit
+    sudo apt-get update
+    sudo apt-get install cuda-drivers
+
+    sudo rm -f cuda-keyring_1.1-1_all.deb
 }
 
+// TODO melhorar essa parte da escrita no arquivo:
+
 hiddenGrub() {
-
-    read -p "Hide GRUB? (y/n): " choice
-
-    if [[ "$choice" == "y" || "$choice" == "Y" || "$choice" == "yes" || "$choice" == "YES" ]]; then
-    
+  
     sudo tee /etc/default/grub > /dev/null << 'EOF'
 # If you change this file, run 'update-grub' afterwards to update
 # /boot/grub/grub.cfg.
@@ -311,11 +329,6 @@ EOF
 
     sudo nano /etc/default/grub
     sudo update-grub
-
-    else 
-        echo "Ok..."
-
-    fi
     
     clear
 }
