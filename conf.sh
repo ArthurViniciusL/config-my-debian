@@ -1,6 +1,12 @@
 #!/bin/bash
 
-#v 4.0.3
+# author: @Arthur.vsl
+# name: Config My Debian
+# version: 5.0.0
+# description: Script to automate my post-installation process on Debian
+# compat: debian
+# reboot: yes
+
 
 startMain() {
 
