@@ -265,18 +265,38 @@ installFlatpakPrograms() {
 installNvidiaDrivers() {
     echo "Installing nvidia drivers..."
 
-    # apt install nvidia-detect -y && clear && nvidia-detect && clear
-    # apt install nvidia-driver firmware-misc-nonfree nvidia-cuda-toolkit
+    # touch /etc/apt/sources.list.d/non-free.sources
 
-    # add Nvidia repository for Debian
-    wget https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/cuda-keyring_1.1-1_all.deb
-    sudo dpkg -i cuda-keyring_1.1-1_all.deb
-    sleep 1
+    DEST="/etc/apt/sources.list.d/non-free.sources"
+
+    {
+        echo "Types: deb deb-src"
+        echo "URIs: http://deb.debian.org/debian"
+        echo "Suites: trixie trixie-updates"
+        echo "Components: main non-free-firmware"
+        echo "Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg"
+    } | sudo tee "$DEST" > /dev/null
+
+    # Types: deb deb-src
+    # URIs: http://deb.debian.org/debian
+    # Suites: trixie trixie-updates
+    # Components: main non-free-firmware
+    # Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+
+    # sudo sed -i 'deb http://deb.debian.org/debian/ trixie main contrib non-free non-free-firmware' 
+    # deb http://security.debian.org/debian-security trixie-security main contrib non-free non-free-firmware
+    # deb http://deb.debian.org/debian/ trixie-updates main contrib non-free non-free-firmware
+
+    sudo apt update
+    sudo apt upgrade
+
+    sudo apt install linux-headers-$(uname -r) -y
+    sudo apt install nvidia-kernel-dkms -y
+    sudo apt install nvidia-driver -y
+    sudo apt install cuda-drivers -y
+    sudo apt install nvtop -y
     
-    sudo apt-get update
-    sudo apt-get install cuda-drivers
-
-    sudo rm -f cuda-keyring_1.1-1_all.deb
 }
 
 hiddenGrub() {
@@ -287,6 +307,7 @@ hiddenGrub() {
     # Use sed to modify the file in place. This is safer than overwriting the whole file.
     sudo sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/' /etc/default/grub
     sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="quiet"/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/' /etc/default/grub
+    sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nvidia-drm.modeset=1"' /etc/default/grub
     # Add GRUB_HIDDEN_TIMEOUT_QUIET if it doesn't exist
     grep -qF "GRUB_HIDDEN_TIMEOUT_QUIET" /etc/default/grub || echo "GRUB_HIDDEN_TIMEOUT_QUIET=true" | sudo tee -a /etc/default/grub > /dev/null
 
