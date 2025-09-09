@@ -18,7 +18,7 @@ startMain() {
 
     read -p "Hidden GRUB? (y/n): " hidden_grub
     if [[ "$hidden_grub" == "y" || "$hidden_grub" == "Y" ]]; then
-        hiddenGrub    
+        # hiddenGrub    
     fi
     
     read -p "Install nvidia drivers? (y/n): " nvidia_drivers
@@ -62,11 +62,10 @@ addSudoUser() {
     sudo usermod -aG sudo "$username"
 
     # The correct and safe way to add a user to the sudoers file without a manual editor session.
-    echo "$username ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers.d/"$username" > /dev/null
+    # echo "$username ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers.d/"$username" > /dev/null
 
-    echo "User $username added as sudoer successfully!"
+    # echo "User $username added as sudoer successfully!"
     
-    apt update
     apt upgrade
 
     clear
