@@ -34,7 +34,7 @@ startMain() {
     installApps
     removeApps
 
-    # installFlatpakPrograms
+#   installFlatpakPrograms
 
     echo 'Reboot this PC...'
 }
@@ -66,7 +66,7 @@ addSudoUser() {
 
     # echo "User $username added as sudoer successfully!"
     
-    apt upgrade
+    apt upgrade -y
 
     clear
 }
@@ -74,7 +74,7 @@ addSudoUser() {
 installApps() {    
     echo "Instalando pacotes do apt..."
     
-    appsFromRepository=("gnome-shell-pomodoro" "gnome-console" "gnome-shell-extension-manager" "obs-studio" "gimp" "inkscape" "kdenlive" "touchegg" "google-chrome-stable" "gnome-shell-extension-gsconnect" "chromium");
+    appsFromRepository=("gnome-shell-pomodoro" "gnome-console" "gnome-shell-extension-manager" "obs-studio" "gimp" "inkscape" "kdenlive" "gnome-shell-extension-gsconnect" "chromium");
 
     for app in "${appsFromRepository[@]}"
     do
@@ -146,8 +146,14 @@ installDevTools() {
 
     echo "Instalandos IDE's..."
 
-    visualStudioCode
+    # visualStudioCode
     intelliJIdea
+
+    wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg
+    echo "deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main" | sudo tee /etc/apt/sources.list.d/vscodium.list
+    sudo apt update
+    sudo apt install codium
+
 
     clear
 
@@ -162,7 +168,7 @@ installDevTools() {
 
     clear
 }
-
+: '
 visualStudioCode() {
 
     echo "Installing Visual Studio Code..."
@@ -176,6 +182,7 @@ visualStudioCode() {
 
     clear
 }
+'
 
 intelliJIdea() {
 
@@ -251,7 +258,7 @@ installFlatpak() {
 installFlatpakPrograms() {
     echo "Installing flatpaks..."
 
-    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.mrvladus.List" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "flathub io.bassi.Amberol")
+    appsFlatpak=("flathub fr.handbrake.ghb" "flathub io.github.alainm23.planify" "flathub md.obsidian.Obsidian" "flathub org.gabmus.hydrapaper" "flathub org.gnome.design.IconLibrary" "flathub com.github.huluti.Curtail" "flathub com.github.flxzt.rnote" "flathub com.github.unrud.VideoDownloader" "flathub com.discordapp.Discord" "flathub io.bassi.Amberol")
 
     for app in "${appsFlatpak[@]}"
     do
@@ -286,6 +293,10 @@ installNvidiaDrivers() {
     # sudo sed -i 'deb http://deb.debian.org/debian/ trixie main contrib non-free non-free-firmware' 
     # deb http://security.debian.org/debian-security trixie-security main contrib non-free non-free-firmware
     # deb http://deb.debian.org/debian/ trixie-updates main contrib non-free non-free-firmware
+
+    #deb http://deb.debian.org/debian/ trixie main contrib non-free non-free-firmware
+    #deb http://security.debian.org/debian-security trixie-security main contrib non-free non-free-firmware
+    #deb http://deb.debian.org/debian/ trixie-updates main contrib non-free non-free-firmware
 
     sudo apt update
     sudo apt upgrade
